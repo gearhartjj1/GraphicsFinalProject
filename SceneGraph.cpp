@@ -28,6 +28,18 @@ SceneGraph::SceneGraph()
 	floorScale = 1.2;
 }
 
+SceneGraph::~SceneGraph()
+{
+	for(int i = 0; i < meshes.size(); i++)
+	{
+		if(meshes[i])
+		{
+			delete meshes[i];
+			meshes[i] = 0;
+		}
+	}
+}
+
 SceneGraph::SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm::vec3 scale, float rot)
 {
 	geo = g;
@@ -142,61 +154,26 @@ void SceneGraph::addChild(SceneGraph* sg)
 void SceneGraph::fillGraph(string inputName)
 {
 	numNodes = 0;
-	stringstream divider;
 	ifstream fin;
 	fin.open(inputName);
 
-	//get the first line
-	string line = "";
-	getline(fin,line);
-
-	int i = 0;
-	while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-	{
-		divider << line[i];
-		i++;
-	}
-	width = atoi(divider.str().c_str());
-	i++;
-
-	divider.str("");
-	while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-	{
-		divider << line[i];
-		i++;
-	}
-	depth = atoi(divider.str().c_str());
-	i++;
+	fin >> width;
+	fin >> depth;
+	fin >> numNodes;
 
 	children = new SceneGraph*[width*depth];
-
 	for(int i = 0; i < width * depth; i++)
 	{
 		children[i] = 0;
 	}
 
-	divider.str("");
-	while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-	{
-		divider << line[i];
-		i++;
-	}
-	numNodes = atoi(divider.str().c_str());
-	i++;
-
-	//skip the initial space
-	getline(fin,line);
-
 	string furnType = "";
 	int xIndex = 0, zIndex = 0;
 	float rotation = 0, xScale = 0, yScale = 0, zScale = 0;
-	getline(fin,line);
+	fin >> furnType;
 
 	while(!fin.fail())
 	{
-		i = 0;
-		furnType = line;
-
 		Geometry* g;
 
 		if(furnType == "box")
@@ -211,67 +188,50 @@ void SceneGraph::fillGraph(string inputName)
 		{
 			g = table;
 		}
+		else if(furnType == "mesh")
+		{
+			string fileName = "";
+			fin >> fileName;
+			//if it is a new mesh type make a new mesh
+			int location;
+			bool found = false;
+			for(location = 0; location < fileNames.size(); location++)
+			{
+				if(fileNames[location]==fileName)
+				{
+					found = true;
+					break;
+				}
+			}
+			if(!found)
+			{
+				Mesh* m = new Mesh(fileName);
+				fileNames.push_back(fileName);
+				meshes.push_back(m);
+				g = meshes[meshes.size()-1];
+			}
+			else
+			{
+				g = meshes[location];
+			}
+			int numDivides = 0;
+			fin >> numDivides;
+			//do something with subdivision
+		}
 
-		//get the x and z indices
-		getline(fin,line);
-		divider.str("");
-		while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-		{
-			divider << line[i];
-			i++;
-		}
-		xIndex = atoi(divider.str().c_str());
-		i++;
-		divider.str("");
-		while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-		{
-			divider << line[i];
-			i++;
-		}
-		zIndex = atoi(divider.str().c_str());
-
-		//get the rotation
-		getline(fin,line);
-		rotation = atof(line.c_str());
-
-		//get the scales
-		getline(fin,line);
-		i = 0;
-		divider.str("");
-		while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-		{
-			divider << line[i];
-			i++;
-		}
-		xScale = atof(divider.str().c_str());
-		i++;
-		divider.str("");
-		while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-		{
-			divider << line[i];
-			i++;
-		}
-		yScale = atof(divider.str().c_str());
-		i++;
-		divider.str("");
-		while(i<line.size() && line[i]!=' ' && line[i]!='\n')
-		{
-			divider << line[i];
-			i++;
-		}
-		zScale = atof(divider.str().c_str());
-		i++;
+		fin >> xIndex;
+		fin >> zIndex;
+		fin >> rotation;
+		fin >> xScale >> yScale >> zScale;
 
 		//puttin in zero for the translations and letting the addChild funtion take care of that
 		SceneGraph* sgp = new SceneGraph(g,width,depth,numNodes,glm::vec3(0,0,0),glm::vec3(xScale,yScale,zScale),rotation);
 
 		//numbers adjusted because the values input are zero indexed
 		addChild(sgp,xIndex+1,-zIndex-1);
-
-		getline(fin,line);
-		getline(fin,line);
+		
+		fin >> furnType;
 	}
 
-	divider.str("");
 	fin.close();
 }

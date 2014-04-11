@@ -13,6 +13,7 @@ Description: this is the header file for scenegraph it contains the declarations
 #include "Cube.h"
 #include "Chair.h"
 #include "Table.h"
+#include "Mesh.h"
 
 #include <vector>
 using std::vector;
@@ -32,6 +33,7 @@ class SceneGraph
 public:
 	//member functions
 	SceneGraph();
+	~SceneGraph();
 	SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm::vec3 scale, float rot);
 	void fillGraph(string inputName);
 	void traverse(glm::mat4 m) const;
@@ -75,4 +77,6 @@ private:
 	float rotY;
 	Geometry* geo;
 	SceneGraph** children;
+	vector<Mesh*> meshes;
+	vector<string> fileNames;
 };

@@ -29,6 +29,7 @@ Face::~Face()
 //constructor builds the mesh from the given file
 Mesh::Mesh(string fileName)
 {
+	setColor(glm::vec3(1.0,1.0,1.0));
 	buffered = false;
 	filled = false;
 	verticesPerFace = 3;
@@ -69,6 +70,7 @@ void Mesh::makeExtrusion(ifstream* file)
 {
 	double height = 0;
 	*file >> height;
+	setHeight(height);
 	int numPoints = 0;
 	*file >> numPoints;
 	glm::vec3* basePoints = new glm::vec3[numPoints];
@@ -132,6 +134,7 @@ void Mesh::makePolygon(glm::vec3 base[], int numPoints)
 void Mesh::makeSurfRev(ifstream* file)
 {
 	int numSlices = 0;
+	float start = 0, end = 0;
 	*file >> numSlices;
 	int numPoints = 0;
 	*file >> numPoints;
@@ -146,8 +149,20 @@ void Mesh::makeSurfRev(ifstream* file)
 			return;
 		}
 		*file >> y;
+		if(y>end)
+		{
+			end = y;
+		}
+		if(y<start)
+		{
+			start = y;
+		}
 		linePoints[i] = glm::vec3(x,y,0);
 	}
+
+	setHeight(end-start);
+	//used to ensure proper transformations of height
+	startY = start;
 
 	surfRev(numSlices,linePoints,numPoints);
 
@@ -268,7 +283,6 @@ bool Mesh::testConvex(glm::vec3 points[], int numPoints)
 	return true;
 }
 
-//want to remove buffering data from the draw function
 void Mesh::draw(glm::mat4 transform, glm::vec3 color)
 {
 	//makes sure the data has been buffered to the graphics card before attempting to draw the shape
@@ -280,7 +294,10 @@ void Mesh::draw(glm::mat4 transform, glm::vec3 color)
 	int numFaces = getNumFaces();
 	int numIndices = (numFaces) * indicesPerFace;
 
-	glUniformMatrix4fv(getModelLoc(), 1, GL_FALSE, &transform[0][0]);
+	glm::mat4 t = glm::translate(glm::mat4(1.0f),glm::vec3(0,-startY,0));
+	t = transform * t;
+
+	glUniformMatrix4fv(getModelLoc(), 1, GL_FALSE, &t[0][0]);
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
 }
 

@@ -26,7 +26,7 @@ struct Face
 	unsigned int* indices;
 };
 
-class Mesh : Geometry
+class Mesh : public Geometry
 {
 public:
 	Mesh(string fileName);
@@ -52,4 +52,5 @@ private:
 	vector<Vertex*> vertices;//this will be buffered into the shader
 	vector<Face*> faces;//this will function as the index buffer indices
 	int verticesPerFace;
+	double startY;
 };

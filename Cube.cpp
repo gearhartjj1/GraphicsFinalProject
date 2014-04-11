@@ -116,6 +116,9 @@ void Cube::draw(glm::mat4 transform, glm::vec3 color)
 {
 	bufferColor(color);
 
+	//sadly the data needs to be buffered on draw because now there shall be shapes other than cubes sad day
+	bufferData();
+
 	glUniformMatrix4fv(this->getModelLoc(), 1, GL_FALSE, &transform[0][0]);
 
 	glDrawArrays(GL_QUADS, 0, 24);

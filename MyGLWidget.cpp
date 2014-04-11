@@ -84,9 +84,8 @@ void MyGLWidget::initializeGL() {
 	scene->setChair(chair);
 	scene->setTable(table);
 
-	scene->fillGraph("testScene2.txt");
+	scene->fillGraph("sample1.txt");
 
-	//unorthodox things going on with the y value appears to be opposite of what it should be
 	lightLocation = glm::vec4((scene->getWidth()* scene->getFloorScale())/2,5,-(scene->getDepth()*(scene->getFloorScale())/2),1);
 
 	glUseProgram(shaderProgram);
@@ -98,25 +97,25 @@ void MyGLWidget::paintGL() {
 	glm::mat4 modelMatrix = glm::mat4(1.0f);
 
 	//matrix used to position the camera to point at the center of the scene
-	//glm::mat4 centerCamera = glm::translate(glm::mat4(1.0f),glm::vec3(-(scene->getWidth()*(scene->getFloorScale()))/2,0,(scene->getDepth()*(scene->getFloorScale())/2)));
-	//modelMatrix = modelMatrix * centerCamera;
+	glm::mat4 centerCamera = glm::translate(glm::mat4(1.0f),glm::vec3(-(scene->getWidth()*(scene->getFloorScale()))/2,0,(scene->getDepth()*(scene->getFloorScale())/2)));
+	modelMatrix = modelMatrix * centerCamera;
 
 	modelMatrix = camera.getMatrix() * modelMatrix;
 
 	//drawing box for light
 	glm::mat4 lightBoxTranslate = glm::translate(glm::mat4(1.0f),glm::vec3(lightLocation.x,lightLocation.y,lightLocation.z));
 	glm::mat4 lightBoxScale = glm::scale(glm::mat4(1.0f),glm::vec3(0.25,0.25,0.25));
-	//baseCube->draw(modelMatrix * lightBoxTranslate * lightBoxScale, glm::vec3(1,1,1));
+	baseCube->draw(modelMatrix * lightBoxTranslate * lightBoxScale, glm::vec3(1,1,1));
 
 	glm::vec4 worldLightLocation = modelMatrix * lightLocation;
 	glUniform4fv(u_lightPos,1,&worldLightLocation[0]);
 
-	//scene->draw(modelMatrix);
+	scene->draw(modelMatrix);
 
 	//drawMesh(testMesh,modelMatrix,glm::vec3(1,1,1));
-	testMesh->draw(modelMatrix,glm::vec3(1,1,1));
-	modelMatrix = modelMatrix * glm::translate(glm::mat4(1.0f),glm::vec3(2,0,0));
-	testMesh2->draw(modelMatrix,glm::vec3(0.5,1,0.25));
+	//testMesh->draw(modelMatrix,glm::vec3(1,1,1));
+	//modelMatrix = modelMatrix * glm::translate(glm::mat4(1.0f),glm::vec3(2,0,0));
+	//testMesh2->draw(modelMatrix,glm::vec3(0.5,1,0.25));
 	glFlush();
 }
 
