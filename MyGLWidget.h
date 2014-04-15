@@ -15,8 +15,8 @@ Description: this is the header file for the MyGLWidget it has the declaration f
 #include <stdlib.h>
 #include <fstream>
 using std::ofstream;
-//#include "SceneGraph.h"
-//#include "geometry.h"
+#include <sstream>
+using std::stringstream;
 #include "SceneGraph.h"
 #include "Cube.h"
 #include "Chair.h"
@@ -53,6 +53,7 @@ private:
 	Table* table;
 
 	SceneGraph* scene;
+	SceneGraph* editNode;
 	Camera camera;
 
 	Mesh* testMesh;
@@ -78,6 +79,8 @@ private:
 	unsigned int u_lightPos;
 
 public slots:
+	void selectNode();
+	void unSelectNode();
 	void chooseScene(void);
 	void rotateUp();
 	void rotateDown();
@@ -91,4 +94,13 @@ public slots:
 	void lightMinusY();
 	void lightPlusZ();
 	void lightMinusZ();
+
+signals:
+	void sendTransX(QString t);
+	void sendTransY(QString t);
+	void sendTransZ(QString t);
+	void sendScaleX(QString s);
+	void sendScaleY(QString s);
+	void sendScaleZ(QString s);
+	void sendRotation(QString r);
 };

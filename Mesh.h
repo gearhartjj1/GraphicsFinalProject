@@ -38,7 +38,7 @@ public:
 	int getNumFaces() {return faces.size();}
 	int getVerticesPerFace() {return verticesPerFace;}
 	bool getFilled() {return filled;}
-	void bufferData();
+	void bufferData(glm::vec3 c);
 private:
 	bool filled;
 	bool buffered;

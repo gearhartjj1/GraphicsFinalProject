@@ -286,7 +286,7 @@ bool Mesh::testConvex(glm::vec3 points[], int numPoints)
 void Mesh::draw(glm::mat4 transform, glm::vec3 color)
 {
 	//makes sure the data has been buffered to the graphics card before attempting to draw the shape
-	bufferData();
+	bufferData(color);
 	if(!buffered)
 		return;
 	int numPoints = getNumVertices();
@@ -301,7 +301,7 @@ void Mesh::draw(glm::mat4 transform, glm::vec3 color)
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
 }
 
-void Mesh::bufferData()
+void Mesh::bufferData(glm::vec3 c)
 {
 	if(!filled)
 		return;
@@ -320,7 +320,7 @@ void Mesh::bufferData()
 	{
 		points[i] = (getVertices())[i]->position;
 		normals[i] = (getVertices())[i]->normal;
-		colors[i] = glm::vec3(1.0f,1.0f,1.0f);
+		colors[i] = c;
 	}
 	
 	for(int i = 0; i < numFaces; i++)

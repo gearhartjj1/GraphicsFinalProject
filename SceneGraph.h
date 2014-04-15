@@ -41,9 +41,12 @@ public:
 	void addChild(SceneGraph* sg, int x, int z);
 	void addChild(SceneGraph* sg);
 
+	SceneGraph* getNextNode(SceneGraph* current);
+
 	//getters
 	int getWidth() {return width;}
 	int getDepth() {return depth;}
+	int getNumNodes() {return numNodes;}
 	float getTransX() {return transX;}
 	float getTransY() {return transY;}
 	float getTransZ() {return transZ;}
@@ -52,6 +55,7 @@ public:
 	float getScaleZ() {return scaleZ;}
 	float getRotY() {return rotY;}
 	double getFloorScale() {return floorScale;}
+	bool getSelected() {return selected;}
 
 	//setters
 	void setTransX(float tX) {transX = tX;}
@@ -61,7 +65,8 @@ public:
 	void setScaleY(float sY) {scaleY = sY;}
 	void setScaleZ(float sZ) {scaleZ = sZ;}
 	void setRotY(float rY) {rotY = rY;}
-	static void setCube(Cube* c) {cube = c;};
+	void setSelected(bool s) {selected = s;}
+	static void setCube(Cube* c) {cube = c;}
 	static void setChair(Chair* ch) {chair = ch;}
 	static void setTable(Table* tb) {table = tb;}
 
@@ -71,6 +76,10 @@ private:
 	static Chair* chair;
 	static Table* table;
 	int width, depth, numNodes;
+	//used to determine if the particular node is currently selected
+	bool selected;
+	//keeps track of which node section on the floor is selected
+	int selectedIndex, nextIndex;
 	double floorScale;
 	float transX, transY, transZ;
 	float scaleX, scaleY, scaleZ;

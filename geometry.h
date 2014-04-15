@@ -24,7 +24,7 @@ class Geometry
 {
 public:
 	//member functions
-	Geometry() {height = 1; geoColor = glm::vec3(1,1,1);}
+	Geometry() {height = 1; geoColor = glm::vec3(1,1,1); selectedColor = glm::vec3(0.1,0.1,0.75);}
 	virtual void draw(glm::mat4 transform, glm::vec3 color) = 0;
 	void bufferColor(glm::vec3 color);
 	//setters
@@ -42,6 +42,7 @@ public:
 	//getters
 	float getHeight() {return height;}
 	glm::vec3 getColor() {return geoColor;}
+	glm::vec3 getSelectedColor() {return selectedColor;}
 	static unsigned int getVbo() {return vbo;}
 	static unsigned int getCbo() {return cbo;}
 	static unsigned int getNbo() {return nbo;}
@@ -54,6 +55,7 @@ public:
 private:
 	float height;
 	glm::vec3 geoColor;
+	glm::vec3 selectedColor;
 	static unsigned int vbo;
 	static unsigned int cbo;
 	static unsigned int nbo;

@@ -9,6 +9,7 @@ Description: this is the cpp file for MyGLWidget it contains the definitions for
 #include "../glm/gtc/matrix_transform.hpp"
 
 MyGLWidget::MyGLWidget(QWidget* parent) : QGLWidget(parent), camera(glm::vec4(0.0f, 0.0f, 10.0f,0.0f), glm::vec4(0.0f, 0.0f, 0.0f,0.0f), glm::vec4(0.0f, 1.0f, 0.0f,0.0f)) {
+	editNode = 0;
 }
 
 MyGLWidget::~MyGLWidget() {
@@ -335,5 +336,61 @@ void MyGLWidget::lightPlusZ()
 void MyGLWidget::lightMinusZ()
 {
 	lightLocation.z -=1;
+	this->update();
+}
+
+void MyGLWidget::selectNode()
+{
+	stringstream s;
+	editNode = scene->getNextNode(editNode);
+	if(!editNode)
+		return;
+
+	s << editNode->getTransX();
+	emit sendTransX(QString::fromStdString(s.str()));
+	s.str("");
+
+	s << editNode->getTransY();
+	emit sendTransY(QString::fromStdString(s.str()));
+	s.str("");
+
+	s << editNode->getTransZ();
+	emit sendTransZ(QString::fromStdString(s.str()));
+	s.str("");
+
+	s << editNode->getScaleX();
+	emit sendScaleX(QString::fromStdString(s.str()));
+	s.str("");
+
+	s << editNode->getScaleY();
+	emit sendScaleY(QString::fromStdString(s.str()));
+	s.str("");
+
+	s << editNode->getScaleZ();
+	emit sendScaleZ(QString::fromStdString(s.str()));
+	s.str("");
+
+	s << editNode->getRotY();
+	emit sendRotation(QString::fromStdString(s.str()));
+	s.str("");
+
+	this->update();
+}
+
+void MyGLWidget::unSelectNode()
+{
+	if(!editNode)
+		return;
+	editNode->setSelected(false);
+	editNode = 0;
+	
+	emit sendTransX("");
+	emit sendTransY("");
+	emit sendTransZ("");
+	emit sendScaleX("");
+	emit sendScaleY("");
+	emit sendScaleZ("");
+	emit sendRotation("");
+
 	this->update();
 }

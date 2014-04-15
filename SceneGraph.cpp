@@ -26,6 +26,9 @@ SceneGraph::SceneGraph()
 	scaleZ = 1;
 	rotY = 0;
 	floorScale = 1.2;
+	selected = false;
+	selectedIndex = 0;
+	nextIndex = 0;
 }
 
 SceneGraph::~SceneGraph()
@@ -60,6 +63,9 @@ SceneGraph::SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm
 		children[i] = 0;
 	}
 	floorScale = 1.2;
+	selected = false;
+	nextIndex = 0;
+	selectedIndex = 0;
 }
 
 void SceneGraph::traverse(glm::mat4 m) const
@@ -71,7 +77,14 @@ void SceneGraph::traverse(glm::mat4 m) const
 	m = m * tr * sc * ro;
 	if(geo)
 	{
-		geo->draw(m,geo->getColor());
+		if(selected)
+		{
+			geo->draw(m,geo->getSelectedColor());
+		}
+		else
+		{
+			geo->draw(m,geo->getColor());
+		}
 	}
 
 	//in this program there would only be one child with the design, but in theory there could be width*depth children I suppose
@@ -234,4 +247,36 @@ void SceneGraph::fillGraph(string inputName)
 	}
 
 	fin.close();
+}
+
+SceneGraph* SceneGraph::getNextNode(SceneGraph* current)
+{
+	if(getNumNodes()<=0)
+	{
+		return 0;
+	}
+
+	//if there is already a node selected and it has children then traverse the children
+	if(current && current->children[0])
+	{
+		current->setSelected(false);
+		current->children[0]->setSelected(true);
+		return current->children[0];
+	}
+
+	for(int i = nextIndex; i < width * depth; i++)
+	{
+		if(children[i])
+		{
+			if(current)
+				current->setSelected(false);
+			children[i]->setSelected(true);
+			selectedIndex = i;
+			nextIndex = i+1;
+			return children[i];
+		}
+	}
+	nextIndex = 0;
+	return getNextNode(current);
+
 }
