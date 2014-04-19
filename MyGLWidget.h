@@ -48,6 +48,7 @@ public:
 	char* textFileRead(const char*);
 
 private:
+	void setTextBoxes();
 	Cube* baseCube;
 	Chair* chair;
 	Table* table;
@@ -80,6 +81,7 @@ private:
 
 public slots:
 	void selectNode();
+	void selectPrevNode();
 	void unSelectNode();
 	void chooseScene(void);
 	void rotateUp();

@@ -339,10 +339,9 @@ void MyGLWidget::lightMinusZ()
 	this->update();
 }
 
-void MyGLWidget::selectNode()
+void MyGLWidget::setTextBoxes()
 {
 	stringstream s;
-	editNode = scene->getNextNode(editNode);
 	if(!editNode)
 		return;
 
@@ -375,6 +374,18 @@ void MyGLWidget::selectNode()
 	s.str("");
 
 	this->update();
+}
+
+void MyGLWidget::selectPrevNode()
+{
+	editNode = scene->getPreviousNode(editNode);
+	setTextBoxes();
+}
+
+void MyGLWidget::selectNode()
+{
+	editNode = scene->getNextNode(editNode);
+	setTextBoxes();
 }
 
 void MyGLWidget::unSelectNode()

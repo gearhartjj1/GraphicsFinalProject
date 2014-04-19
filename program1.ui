@@ -298,14 +298,14 @@
    <widget class="QPushButton" name="pushButton_14">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>560</x>
       <y>470</y>
-      <width>75</width>
+      <width>51</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Next Item</string>
+     <string>Next</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_15">
@@ -508,6 +508,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_16">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>470</y>
+      <width>51</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Prev</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -559,6 +572,7 @@
     <slot>lightMinusZ()</slot>
     <slot>selectNode()</slot>
     <slot>unSelectNode()</slot>
+    <slot>selectPrevNode()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -915,6 +929,22 @@
     <hint type="destinationlabel">
      <x>552</x>
      <y>617</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_16</sender>
+   <signal>clicked()</signal>
+   <receiver>widget</receiver>
+   <slot>selectPrevNode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>514</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>419</x>
+     <y>428</y>
     </hint>
    </hints>
   </connection>

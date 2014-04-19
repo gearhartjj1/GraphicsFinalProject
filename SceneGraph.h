@@ -39,9 +39,10 @@ public:
 	void traverse(glm::mat4 m) const;
 	void draw(glm::mat4 m);
 	void addChild(SceneGraph* sg, int x, int z);
-	void addChild(SceneGraph* sg);
+	void addChild(SceneGraph* sg, SceneGraph* parent);
 
 	SceneGraph* getNextNode(SceneGraph* current);
+	SceneGraph* getPreviousNode(SceneGraph* current);
 
 	//getters
 	int getWidth() {return width;}
@@ -71,6 +72,8 @@ public:
 	static void setTable(Table* tb) {table = tb;}
 
 private:
+	//function to get the top of the tower
+	SceneGraph* getTowerTop(SceneGraph* current);
 	//do not delete the geometry pointers that were given from the widget!!!
 	static Cube* cube;
 	static Chair* chair;
@@ -85,6 +88,7 @@ private:
 	float scaleX, scaleY, scaleZ;
 	float rotY;
 	Geometry* geo;
+	SceneGraph* parent;
 	SceneGraph** children;
 	vector<Mesh*> meshes;
 	vector<string> fileNames;

@@ -29,6 +29,7 @@ SceneGraph::SceneGraph()
 	selected = false;
 	selectedIndex = 0;
 	nextIndex = 0;
+	parent = 0;
 }
 
 SceneGraph::~SceneGraph()
@@ -66,6 +67,7 @@ SceneGraph::SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm
 	selected = false;
 	nextIndex = 0;
 	selectedIndex = 0;
+	parent = 0;
 }
 
 void SceneGraph::traverse(glm::mat4 m) const
@@ -137,17 +139,18 @@ void SceneGraph::addChild(SceneGraph* sg, int x, int z)
 
 	if(children[x * depth + z])
 	{
-		children[x * depth + z]->addChild(sg);
+		children[x * depth + z]->addChild(sg, children[x * depth + z]);
 	}
 	else
 	{
 		sg->setTransX(x + 0.5f);
 		sg->setTransZ(z + 0.5f);
 		children[x * depth + z] = sg;
+		children[x*depth+z]->parent = 0;
 	}
 }
 
-void SceneGraph::addChild(SceneGraph* sg)
+void SceneGraph::addChild(SceneGraph* sg,SceneGraph* parent)
 {
 	if(this->geo)
 	{
@@ -156,11 +159,12 @@ void SceneGraph::addChild(SceneGraph* sg)
 
 	if(children[0])
 	{
-		children[0]->addChild(sg);
+		children[0]->addChild(sg,children[0]);
 	}
 	else
 	{
 		children[0] = sg;
+		children[0]->parent = parent;
 	}
 }
 
@@ -276,7 +280,55 @@ SceneGraph* SceneGraph::getNextNode(SceneGraph* current)
 			return children[i];
 		}
 	}
+	//if you are at the end of the base nodes go back to zero and restart
 	nextIndex = 0;
 	return getNextNode(current);
 
+}
+
+SceneGraph* SceneGraph::getTowerTop(SceneGraph* current)
+{
+	if(!current->children[0])
+	{
+		return current;
+	}
+	else
+	{
+		return getTowerTop(current->children[0]);
+	}
+}
+
+SceneGraph* SceneGraph::getPreviousNode(SceneGraph* current)
+{
+	if(getNumNodes()<=0)
+	{
+		return 0;
+	}
+
+	//if there is already a node selected and it has children then traverse the children
+	if(current && current->parent)
+	{
+		current->setSelected(false);
+		current->parent->setSelected(true);
+		return current->parent;
+	}
+
+	//subtract two because the next index is one past the most current node and you do not want to select itself again so you dont check itself as well
+	for(int i = nextIndex-2; i > 0; i--)
+	{
+		if(children[i])
+		{
+			if(current)
+				current->setSelected(false);
+			SceneGraph* node = getTowerTop(children[i]);
+			node->setSelected(true);
+			selectedIndex = i;
+			nextIndex = i+1;
+			return node;
+		}
+	}
+
+	//if you reached the beginning go to the end and try again
+	nextIndex = width * depth;
+	return getPreviousNode(current);
 }
