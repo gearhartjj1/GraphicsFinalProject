@@ -393,7 +393,7 @@ void MyGLWidget::unSelectNode()
 	if(!editNode)
 		return;
 	editNode->setSelected(false);
-	editNode = 0;
+	//editNode = 0;
 	
 	emit sendTransX("");
 	emit sendTransY("");
@@ -403,5 +403,131 @@ void MyGLWidget::unSelectNode()
 	emit sendScaleZ("");
 	emit sendRotation("");
 
+	this->update();
+}
+
+void MyGLWidget::setNodeTransX(QString x)
+{
+	if(!editNode)
+	{
+		return;
+	}
+
+	double transX = editNode->getTransX();
+	transX = atof(x.toStdString().c_str());
+	editNode->setTransX(transX);
+
+	stringstream s;
+	s << editNode->getTransX();
+	emit sendTransX(QString::fromStdString(s.str()));
+	s.str("");
+	this->update();
+}
+
+void MyGLWidget::setNodeTransY(QString y)
+{
+	if(!editNode)
+	{
+		return;
+	}
+
+	double transY = editNode->getTransY();
+	transY = atof(y.toStdString().c_str());
+	editNode->setTransY(transY);
+
+	stringstream s;
+	s << editNode->getTransY();
+	emit sendTransY(QString::fromStdString(s.str()));
+	s.str("");
+	this->update();
+}
+
+void MyGLWidget::setNodeTransZ(QString z)
+{
+	if(!editNode)
+	{
+		return;
+	}
+
+	double transZ = editNode->getTransZ();
+	transZ = atof(z.toStdString().c_str());
+	editNode->setTransZ(transZ);
+
+	stringstream s;
+	s << editNode->getTransZ();
+	emit sendTransZ(QString::fromStdString(s.str()));
+	s.str("");
+	this->update();
+}
+
+void MyGLWidget::setNodeScaleX(QString sX)
+{
+	if(!editNode)
+	{
+		return;
+	}
+
+	double scaleX = editNode->getScaleX();
+	scaleX = atof(sX.toStdString().c_str());
+	editNode->setScaleX(scaleX);
+
+	stringstream s;
+	s << editNode->getScaleX();
+	emit sendScaleX(QString::fromStdString(s.str()));
+	s.str("");
+	this->update();
+}
+
+void MyGLWidget::setNodeScaleY(QString sY)
+{
+	if(!editNode)
+	{
+		return;
+	}
+
+	double scaleY = editNode->getScaleY();
+	scaleY = atof(sY.toStdString().c_str());
+	editNode->setScaleY(scaleY);
+
+	stringstream s;
+	s << editNode->getScaleY();
+	emit sendScaleY(QString::fromStdString(s.str()));
+	s.str("");
+	this->update();
+}
+
+void MyGLWidget::setNodeScaleZ(QString sZ)
+{
+	if(!editNode)
+	{
+		return;
+	}
+
+	double scaleZ = editNode->getScaleZ();
+	scaleZ = atof(sZ.toStdString().c_str());
+	editNode->setScaleZ(scaleZ);
+
+	stringstream s;
+	s << editNode->getScaleZ();
+	emit sendScaleZ(QString::fromStdString(s.str()));
+	s.str("");
+	this->update();
+}
+
+void MyGLWidget::setNodeRotation(QString r)
+{
+	if(!editNode)
+	{
+		return;
+	}
+
+	double rot = editNode->getRotY();
+	rot = atof(r.toStdString().c_str());
+	editNode->setRotY(rot);
+
+	stringstream s;
+	s << editNode->getRotY();
+	emit sendRotation(QString::fromStdString(s.str()));
+	s.str("");
 	this->update();
 }

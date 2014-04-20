@@ -29,6 +29,7 @@ Face::~Face()
 //constructor builds the mesh from the given file
 Mesh::Mesh(string fileName)
 {
+	setMesh(true);
 	setColor(glm::vec3(1.0,1.0,1.0));
 	buffered = false;
 	filled = false;

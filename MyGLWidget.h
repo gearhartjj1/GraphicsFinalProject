@@ -80,6 +80,15 @@ private:
 	unsigned int u_lightPos;
 
 public slots:
+	//slots for taking new values for edit node
+	void setNodeTransX(QString x);
+	void setNodeTransY(QString y);
+	void setNodeTransZ(QString z);
+	void setNodeScaleX(QString sX);
+	void setNodeScaleY(QString sY);
+	void setNodeScaleZ(QString sZ);
+	void setNodeRotation(QString r);
+
 	void selectNode();
 	void selectPrevNode();
 	void unSelectNode();

@@ -24,12 +24,13 @@ class Geometry
 {
 public:
 	//member functions
-	Geometry() {height = 1; geoColor = glm::vec3(1,1,1); selectedColor = glm::vec3(0.1,0.1,0.75);}
+	Geometry() {height = 1; geoColor = glm::vec3(1,1,1); selectedColor = glm::vec3(0.1,0.1,0.75);isMesh = false;}
 	virtual void draw(glm::mat4 transform, glm::vec3 color) = 0;
 	void bufferColor(glm::vec3 color);
 	//setters
 	void setHeight(float h) {height = h;}
 	void setColor(glm::vec3 c) {geoColor = c;}
+	void setMesh(bool m) {isMesh = m;}
 	static void setVbo(unsigned int v) {vbo = v;}
 	static void setCbo(unsigned int c) {cbo = c;}
 	static void setNbo(unsigned int n) {nbo = n;}
@@ -43,6 +44,7 @@ public:
 	float getHeight() {return height;}
 	glm::vec3 getColor() {return geoColor;}
 	glm::vec3 getSelectedColor() {return selectedColor;}
+	bool getIsMesh() {return isMesh;}
 	static unsigned int getVbo() {return vbo;}
 	static unsigned int getCbo() {return cbo;}
 	static unsigned int getNbo() {return nbo;}
@@ -53,6 +55,7 @@ public:
 	static unsigned int getNormalLoc() {return vNormal;}
 
 private:
+	bool isMesh;
 	float height;
 	glm::vec3 geoColor;
 	glm::vec3 selectedColor;
