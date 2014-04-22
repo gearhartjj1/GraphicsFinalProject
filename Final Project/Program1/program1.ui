@@ -298,30 +298,30 @@
    <widget class="QPushButton" name="pushButton_14">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>560</x>
       <y>470</y>
-      <width>75</width>
+      <width>51</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Next Item</string>
+     <string>Next</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_15">
     <property name="geometry">
      <rect>
-      <x>520</x>
+      <x>490</x>
       <y>610</y>
-      <width>75</width>
+      <width>61</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>Done</string>
+     <string>Set Values</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="transXLine">
+   <widget class="InputLine" name="transXLine">
     <property name="geometry">
      <rect>
       <x>500</x>
@@ -344,7 +344,7 @@
      <string>Translation</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="transYLine">
+   <widget class="InputLine" name="transYLine">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -354,7 +354,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="transZLine">
+   <widget class="InputLine" name="transZLine">
     <property name="geometry">
      <rect>
       <x>580</x>
@@ -429,7 +429,7 @@
      <string>Z</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="scaleXLine">
+   <widget class="InputLine" name="scaleXLine">
     <property name="geometry">
      <rect>
       <x>500</x>
@@ -452,7 +452,7 @@
      <string>X</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="scaleYLine">
+   <widget class="InputLine" name="scaleYLine">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -462,7 +462,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="scaleZLine">
+   <widget class="InputLine" name="scaleZLine">
     <property name="geometry">
      <rect>
       <x>580</x>
@@ -498,7 +498,7 @@
      <string>Rotation</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="rotationLine">
+   <widget class="InputLine" name="rotationLine">
     <property name="geometry">
      <rect>
       <x>540</x>
@@ -506,6 +506,32 @@
       <width>31</width>
       <height>20</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_16">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>470</y>
+      <width>51</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Prev</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_17">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>610</y>
+      <width>61</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Done</string>
     </property>
    </widget>
   </widget>
@@ -559,9 +585,51 @@
     <slot>lightMinusZ()</slot>
     <slot>selectNode()</slot>
     <slot>unSelectNode()</slot>
+    <slot>selectPrevNode()</slot>
+    <slot>setNodeTransX(QString)</slot>
+    <slot>setNodeTransY(QString)</slot>
+    <slot>setNodeTransZ(QString)</slot>
+    <slot>setNodeScaleX(QString)</slot>
+    <slot>setNodeScaleY(QString)</slot>
+    <slot>setNodeScaleZ(QString)</slot>
+    <slot>setNodeRotation(QString)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>InputLine</class>
+   <extends>QLineEdit</extends>
+   <header location="global">inputline.h</header>
+   <slots>
+    <signal>sendText(QString)</signal>
+    <slot>signalFile()</slot>
    </slots>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>pushButton</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_4</tabstop>
+  <tabstop>pushButton_5</tabstop>
+  <tabstop>pushButton_6</tabstop>
+  <tabstop>pushButton_7</tabstop>
+  <tabstop>pushButton_8</tabstop>
+  <tabstop>pushButton_9</tabstop>
+  <tabstop>pushButton_10</tabstop>
+  <tabstop>pushButton_11</tabstop>
+  <tabstop>pushButton_12</tabstop>
+  <tabstop>pushButton_13</tabstop>
+  <tabstop>pushButton_14</tabstop>
+  <tabstop>pushButton_15</tabstop>
+  <tabstop>transXLine</tabstop>
+  <tabstop>transYLine</tabstop>
+  <tabstop>transZLine</tabstop>
+  <tabstop>scaleXLine</tabstop>
+  <tabstop>scaleYLine</tabstop>
+  <tabstop>scaleZLine</tabstop>
+  <tabstop>rotationLine</tabstop>
+  <tabstop>pushButton_16</tabstop>
+ </tabstops>
  <resources>
   <include location="program1.qrc"/>
  </resources>
@@ -791,14 +859,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>pushButton_17</sender>
    <signal>clicked()</signal>
    <receiver>widget</receiver>
    <slot>unSelectNode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>545</x>
-     <y>648</y>
+     <x>590</x>
+     <y>654</y>
     </hint>
     <hint type="destinationlabel">
      <x>541</x>
@@ -915,6 +983,246 @@
     <hint type="destinationlabel">
      <x>552</x>
      <y>617</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_16</sender>
+   <signal>clicked()</signal>
+   <receiver>widget</receiver>
+   <slot>selectPrevNode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>512</x>
+     <y>514</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>419</x>
+     <y>428</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>transXLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>651</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>515</x>
+     <y>551</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>transYLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>541</x>
+     <y>647</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>557</x>
+     <y>547</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>transZLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>550</x>
+     <y>650</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>586</x>
+     <y>554</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>scaleXLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>525</x>
+     <y>659</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>513</x>
+     <y>594</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>scaleYLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>529</x>
+     <y>652</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>551</x>
+     <y>592</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>scaleZLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>649</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>590</x>
+     <y>595</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_15</sender>
+   <signal>clicked()</signal>
+   <receiver>rotationLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>547</x>
+     <y>656</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>556</x>
+     <y>629</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transXLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeTransX(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>511</x>
+     <y>550</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>450</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transYLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeTransY(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>555</x>
+     <y>549</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>427</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>transZLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeTransZ(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>597</x>
+     <y>555</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>316</x>
+     <y>446</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scaleXLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeScaleX(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>509</x>
+     <y>596</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>359</x>
+     <y>439</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scaleYLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeScaleY(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>562</x>
+     <y>591</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>448</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scaleZLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeScaleZ(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>595</x>
+     <y>593</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>375</x>
+     <y>417</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>rotationLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeRotation(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>550</x>
+     <y>628</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>427</y>
     </hint>
    </hints>
   </connection>

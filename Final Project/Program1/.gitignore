@@ -16,12 +16,6 @@ local.properties
 .settings/
 .loadpath
 
-*.sdf
-Win32/
-glm/
-GeneratedFiles/
-ipch/
-
 # External tool builders
 .externalToolBuilders/
 
