@@ -89,6 +89,9 @@
     <ClCompile Include="inputLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="catmullclark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="program1.h">
@@ -133,6 +136,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="catmullclark.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
