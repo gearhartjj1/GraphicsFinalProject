@@ -31,8 +31,8 @@ class Mesh : public Geometry
 public:
 	Mesh(string fileName);
 	~Mesh();
-	vector<Vertex*> getVertices() {return vertices;}
-	vector<Face*> getFaces() {return faces;}
+	vector<Vertex*>& getVertices() {return vertices;}
+	vector<Face*>& getFaces() {return faces;}
 	void draw(glm::mat4 transform, glm::vec3 color);
 	int getNumVertices() {return vertices.size();}
 	int getNumFaces() {return faces.size();}
