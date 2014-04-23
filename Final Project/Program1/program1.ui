@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>687</height>
+    <height>710</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -534,6 +534,19 @@
      <string>Done</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_18">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>630</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sub-Divide</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -593,6 +606,7 @@
     <slot>setNodeScaleY(QString)</slot>
     <slot>setNodeScaleZ(QString)</slot>
     <slot>setNodeRotation(QString)</slot>
+    <slot>subDivide()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1223,6 +1237,22 @@
     <hint type="destinationlabel">
      <x>380</x>
      <y>427</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_18</sender>
+   <signal>clicked()</signal>
+   <receiver>widget</receiver>
+   <slot>subDivide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>217</x>
+     <y>671</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>171</x>
+     <y>440</y>
     </hint>
    </hints>
   </connection>

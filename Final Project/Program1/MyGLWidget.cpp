@@ -531,3 +531,8 @@ void MyGLWidget::setNodeRotation(QString r)
 	s.str("");
 	this->update();
 }
+
+void MyGLWidget::subDivide()
+{
+	//do something here
+}

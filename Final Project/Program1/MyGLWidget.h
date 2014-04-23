@@ -80,6 +80,8 @@ private:
 	unsigned int u_lightPos;
 
 public slots:
+	void subDivide();
+
 	//slots for taking new values for edit node
 	void setNodeTransX(QString x);
 	void setNodeTransY(QString y);
