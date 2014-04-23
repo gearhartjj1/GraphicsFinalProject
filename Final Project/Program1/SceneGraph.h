@@ -57,6 +57,7 @@ public:
 	float getRotY() {return rotY;}
 	double getFloorScale() {return floorScale;}
 	bool getSelected() {return selected;}
+	Geometry* getGeometry() {return geo;}
 
 	//setters
 	void setTransX(float tX) {transX = tX;}

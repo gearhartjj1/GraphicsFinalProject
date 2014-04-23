@@ -34,6 +34,7 @@ void catmullclark(Mesh &mesh, int iterations) {
 		to[i]=i;
 	int cnt=0;
 	for(int i=0; i < (int)mesh.getVertices().size(); ++i) {
+		assert(mesh.getVertices()[i]);
 		Vertex &v = *mesh.getVertices()[i];
 		if(m.count(v.position)) {
 			m[v.position].second->normal += glm::normalize(v.normal);
@@ -44,6 +45,8 @@ void catmullclark(Mesh &mesh, int iterations) {
 			m[v.position].first = cnt++;
 		}
 	}
+	for(int i=0; i < (int)mesh.getVertices().size(); ++i)
+		delete mesh.getVertices()[i];
 	mesh.getVertices().clear();
 	mesh.getVertices().resize(cnt);
 	for(MapType::iterator it=m.begin(); it != m.end(); ++it) {

@@ -7,6 +7,7 @@ Description: this is the cpp file for MyGLWidget it contains the definitions for
 
 #include "MyGLWidget.h"
 #include "../glm/gtc/matrix_transform.hpp"
+#include "catmullclark.h"
 
 MyGLWidget::MyGLWidget(QWidget* parent) : QGLWidget(parent), camera(glm::vec4(0.0f, 0.0f, 10.0f,0.0f), glm::vec4(0.0f, 0.0f, 0.0f,0.0f), glm::vec4(0.0f, 1.0f, 0.0f,0.0f)) {
 	editNode = 0;
@@ -534,5 +535,10 @@ void MyGLWidget::setNodeRotation(QString r)
 
 void MyGLWidget::subDivide()
 {
-	//do something here
+	//can check whether is mesh
+	if(editNode->getGeometry()->getIsMesh()) {
+		Mesh *mesh = dynamic_cast<Mesh*>(editNode->getGeometry());
+		if(mesh)
+			catmullclark(*mesh, 1);
+	}
 }
