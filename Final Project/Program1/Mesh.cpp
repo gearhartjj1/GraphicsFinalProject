@@ -30,6 +30,7 @@ Face::~Face()
 Mesh::Mesh(string fileName)
 {
 	setMesh(true);
+	startY = 0;
 	setColor(glm::vec3(1.0,1.0,1.0));
 	buffered = false;
 	filled = false;

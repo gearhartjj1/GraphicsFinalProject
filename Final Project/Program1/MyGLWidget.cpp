@@ -27,7 +27,7 @@ void MyGLWidget::initializeGL() {
 	table = new Table(baseCube);
 	scene = new SceneGraph();
 
-	testMesh = new Mesh("flashLight.txt");
+	testMesh = new Mesh("extrusion1.dat");
 	testMesh2 = new Mesh("surfrev1.dat");
 
 	glewInit();
@@ -80,7 +80,7 @@ void MyGLWidget::initializeGL() {
 	Geometry::setIbo(ibo);
 
 	baseCube->bufferData();
-	//testMesh->bufferData();
+	testMesh->bufferData(glm::vec3(1,1,1));;
 
 	scene->setCube(baseCube);
 	scene->setChair(chair);
