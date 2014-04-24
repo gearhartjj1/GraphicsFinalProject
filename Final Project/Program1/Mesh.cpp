@@ -110,10 +110,17 @@ void Mesh::makePolygon(glm::vec3 base[], int numPoints)
 
 	//put in polygon base points
 	Vertex* v = new Vertex();
-	glm::vec3 norm = glm::cross((base[numPoints-2]-base[0]),(base[1]-base[0]));
+	glm::vec3 norm = glm::cross((base[numPoints-1]-base[0]),(base[1]-base[0]));
+	if(norm.x != 0 || norm.y != 0 || norm.z != 0)
+	{
+		//have to calculate the normal for the first and last point slightly differently because they are the same point
+		v->normal = glm::normalize(glm::vec4(norm.x,norm.y,norm.z,0));
+	}
+	else
+	{
+		v->normal = (glm::vec4(norm.x,norm.y,norm.z,0));
+	}
 	v->position = glm::vec4(base[0].x,base[0].y,base[0].z,1);
-	//have to calculate the normal for the first and last point slightly differently because they are the same point
-	v->normal = glm::normalize(glm::vec4(norm.x,norm.y,norm.z,0));
 	vertices.push_back(v);
 
 	for(int i = 1; i < numPoints-1; i++)
@@ -121,13 +128,28 @@ void Mesh::makePolygon(glm::vec3 base[], int numPoints)
 		v = new Vertex();
 		v->position = glm::vec4(base[i].x,base[i].y,base[i].z,1);
 		norm = glm::cross((base[i-1]-base[i]),(base[i+1]-base[i]));
-		v->normal = glm::normalize(glm::vec4(norm.x,norm.y,norm.z,0));
+		if(norm.x != 0 || norm.y != 0 || norm.z != 0)
+		{
+			v->normal = glm::normalize(glm::vec4(norm.x,norm.y,norm.z,0));
+		}
+		else
+		{
+			v->normal = (glm::vec4(norm.x,norm.y,norm.z,0));
+		}
 		vertices.push_back(v);
 	}
 	v = new Vertex();
 	v->position = glm::vec4(base[numPoints-1].x,base[numPoints-1].y,base[numPoints-1].z,1);
 	norm = glm::cross((base[numPoints-2]-base[numPoints-1]),(base[0]-base[numPoints-1]));
-	v->normal = glm::normalize(glm::vec4(norm.x,norm.y,norm.z,0));
+	if(norm.x != 0 || norm.y != 0 || norm.z != 0)
+	{
+		v->normal = glm::normalize(glm::vec4(norm.x,norm.y,norm.z,0));
+	}
+	else
+	{
+		v->normal = (glm::vec4(norm.x,norm.y,norm.z,0));
+	}
+
 	vertices.push_back(v);
 
 	filled = true;
@@ -206,6 +228,7 @@ void Mesh::extrude(double height, glm::vec3 base[], int numPoints)
 		wall[3] = top[i];
 		makePolygon(wall,4);
 	}
+
 }
 
 void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
@@ -220,7 +243,7 @@ void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
 
 	for(int i = 0; i < numSlices; i++)
 	{
-		topCap[i] = originalPoints[numPoints-1];
+		topCap[numSlices-1-i] = originalPoints[numPoints-1];
 		bottomCap[i] = originalPoints[0];
 		glm::vec3* newPoints = new glm::vec3[numPoints];
 		for(int k = 0; k < numPoints; k++)
@@ -229,7 +252,7 @@ void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
 			point = rotate * point;
 			newPoints[k] = glm::vec3(point.x,point.y,point.z);
 		}
-		for(int j = 0; j < numPoints; j++)
+		for(int j = 0; j < numPoints-1; j++)
 		{
 			glm::vec3* side = new glm::vec3[4];
 			side[0] = originalPoints[j];
@@ -251,11 +274,11 @@ void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
 	}
 
 	//add end cap if necessary
-	if(linePoints[numPoints-1].x!=0)
+	if(linePoints[numPoints-1].x!=0 && (linePoints[0].y!=linePoints[numPoints-1].y || linePoints[0].z!=linePoints[numPoints-1].z))
 	{
 		makePolygon(topCap,numSlices);
 	}
-	if(linePoints[0].x!=0)
+	if(linePoints[0].x!=0 && (linePoints[0].y!=linePoints[numPoints-1].y || linePoints[0].z!=linePoints[numPoints-1].z))
 	{
 		makePolygon(bottomCap,numSlices);
 	}
@@ -322,6 +345,10 @@ void Mesh::bufferData(glm::vec3 c)
 	{
 		points[i] = (getVertices())[i]->position;
 		normals[i] = (getVertices())[i]->normal;
+		if(normals[i].x==0 && normals[i].y==0 && normals[i].z ==0)
+		{
+			int stuff = 0;
+		}
 		colors[i] = c;
 	}
 	
