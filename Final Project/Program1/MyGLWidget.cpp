@@ -538,7 +538,9 @@ void MyGLWidget::subDivide()
 	//can check whether is mesh
 	if(editNode->getGeometry()->getIsMesh()) {
 		Mesh *mesh = dynamic_cast<Mesh*>(editNode->getGeometry());
-		if(mesh)
+		if(mesh) {
 			catmullclark(*mesh, 1);
+			update();
+		}
 	}
 }
