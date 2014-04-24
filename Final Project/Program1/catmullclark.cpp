@@ -30,10 +30,10 @@ namespace {
 	};
 
 	void validateNormal(glm::vec4 normal) {
-		assert(!_finite(normal.x));
-		assert(!_finite(normal.y));
-		assert(!_finite(normal.z));
-		assert(abs(normal.x) + abs(normal.y) + abs(normal.z));
+		assert(_finite(normal.x));
+		assert(_finite(normal.y));
+		assert(_finite(normal.z));
+		assert(abs(normal.x) + abs(normal.y) + abs(normal.z) > 0);
 		assert(normal.w == 0);
 	}
 }
