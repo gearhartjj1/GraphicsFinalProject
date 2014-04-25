@@ -409,6 +409,7 @@ void Mesh::triangulate() {
 			idx[2] = face.indices[2];
 			delete face.indices;
 			face.indices = idx;
+			face.numVertices = 3;
 		}
 	}
 }
