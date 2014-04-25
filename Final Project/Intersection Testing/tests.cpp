@@ -186,7 +186,7 @@ void RunRayCubeTests() {
 	RunTest(
 		"Strafing the cube",
 		Test_RayCubeIntersect(NEGFIVEOFIVE_VECTOR, POSXNEGZ_NORM_VECTOR, IDENTITY_MATRIX),
-		TEN_KAZILLION); // TODO change this to the right number
+		SQRT_TWO*4.5); // TODO change this to the right number
 }
 
 void RunYourTests() {
