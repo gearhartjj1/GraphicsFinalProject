@@ -386,3 +386,29 @@ void Mesh::bufferData(glm::vec3 c)
 	delete indices;
 	buffered = true;
 }
+
+void Mesh::triangulate() {
+	int n=faces.size();
+	for(int i=0; i < n; ++i) {
+		assert(faces[i]);
+		Face &face = *faces[i];
+		//the current face will become one triangle, the rest will be pushed onto the back
+		//this method has poor face locality, but allows the algorithm to be implemented with minimal array copying
+		if(face.numVertices > 3) {
+			for(int j=2; j < face.numVertices-1; ++j) {
+				Face *next = new Face(3);
+				next->indices[0] = face.indices[0];
+				next->indices[1] = face.indices[j];
+				next->indices[2] = face.indices[j+1];
+				faces.push_back(next);
+			}
+
+			unsigned *idx = new unsigned[3];
+			idx[0] = face.indices[0];
+			idx[1] = face.indices[1];
+			idx[2] = face.indices[2];
+			delete face.indices;
+			face.indices = idx;
+		}
+	}
+}
