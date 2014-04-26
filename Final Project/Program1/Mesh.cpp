@@ -31,12 +31,72 @@ Face::~Face()
 	delete indices;
 }
 
+Face::Face(const Face &original)
+{
+	numVertices = original.numVertices;
+	indices = new unsigned int[numVertices];
+	for(int i = 0; i < numVertices; i++)
+	{
+		indices[i] = original.indices[i];
+	}
+}
+
+Face& Face::operator= (const Face &source)
+{
+	numVertices = source.numVertices;
+	indices = new unsigned int[numVertices];
+	for(int i = 0; i < numVertices; i++)
+	{
+		indices[i] = source.indices[i];
+	}
+	return *this;
+}
+
 Mesh::Mesh() {
 	setMesh(true);
 	setColor(glm::vec3(1.0,1.0,1.0));
 	buffered = false;
 	filled = false;
 	verticesPerFace = 3;
+}
+
+Mesh::Mesh(const Mesh &original)
+{
+	filled = original.filled;
+	buffered = original.buffered;
+	verticesPerFace = original.verticesPerFace;
+	setColor(glm::vec3(1.0,1.0,1.0));
+	startY = original.startY;
+	for(int i = 0; i < original.getVertices().size(); i++)
+	{
+		Vertex* v = new Vertex(original.getVertices()[i]->position,original.getVertices()[i]->color,original.getVertices()[i]->normal);
+		vertices.push_back(v);
+	}
+	for(int i = 0; i < original.getFaces().size();i++)
+	{
+		Face*  f = new Face(*original.getFaces()[i]);
+		faces.push_back(f);
+	}
+}
+
+Mesh& Mesh::operator= (const Mesh &source)
+{
+	filled = source.filled;
+	buffered = source.buffered;
+	verticesPerFace = source.verticesPerFace;
+	setColor(glm::vec3(1.0,1.0,1.0));
+	startY = source.startY;
+	for(int i = 0; i < source.getVertices().size(); i++)
+	{
+		Vertex* v = new Vertex(source.getVertices()[i]->position,source.getVertices()[i]->color,source.getVertices()[i]->normal);
+		vertices.push_back(v);
+	}
+	for(int i = 0; i < source.getFaces().size();i++)
+	{
+		Face*  f = new Face(*source.getFaces()[i]);
+		faces.push_back(f);
+	}
+	return *this;
 }
 
 //constructor builds the mesh from the given file

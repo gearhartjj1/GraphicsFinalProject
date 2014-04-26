@@ -7,7 +7,7 @@
  **/
 
 #include "EasyBMP.h"
-#include "glm/glm.hpp"
+#include "glm\glm.hpp"
 
 #include <iostream>
 #include <utility>

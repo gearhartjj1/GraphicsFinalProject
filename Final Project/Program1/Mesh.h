@@ -24,12 +24,18 @@ struct Face
 	~Face();
 	int numVertices;
 	unsigned int* indices;
+	//copy constructor
+	Face(const Face &original);
+	Face& operator= (const Face &source);
 };
 
 class Mesh : public Geometry
 {
 public:
 	Mesh();
+	//copy constructor
+	Mesh(const Mesh &original);
+	Mesh& operator= (const Mesh &source);
 	Mesh(string fileName);
 	~Mesh();
 	vector<Vertex*>& getVertices() {return vertices;}
