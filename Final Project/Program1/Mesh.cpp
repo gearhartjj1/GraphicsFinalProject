@@ -17,13 +17,26 @@ Face::Face()
 
 Face::Face(int numV)
 {
-	numVertices = numV;
-	indices = new unsigned int[numV];
+	if(numV > 0) {
+		numVertices = numV;
+		indices = new unsigned int[numV];
+	} else {
+		numVertices = 0;
+		indices = 0;
+	}
 }
 
 Face::~Face()
 {
 	delete indices;
+}
+
+Mesh::Mesh() {
+	setMesh(true);
+	setColor(glm::vec3(1.0,1.0,1.0));
+	buffered = false;
+	filled = false;
+	verticesPerFace = 3;
 }
 
 //constructor builds the mesh from the given file
@@ -412,4 +425,5 @@ void Mesh::triangulate() {
 			face.numVertices = 3;
 		}
 	}
+	verticesPerFace=3;
 }

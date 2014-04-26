@@ -29,10 +29,13 @@ struct Face
 class Mesh : public Geometry
 {
 public:
+	Mesh();
 	Mesh(string fileName);
 	~Mesh();
 	vector<Vertex*>& getVertices() {return vertices;}
+	const vector<Vertex*>& getVertices() const {return vertices;}
 	vector<Face*>& getFaces() {return faces;}
+	const vector<Face*>& getFaces() const {return faces;}
 	void draw(glm::mat4 transform, glm::vec3 color);
 	int getNumVertices() {return vertices.size();}
 	int getNumFaces() {return faces.size();}

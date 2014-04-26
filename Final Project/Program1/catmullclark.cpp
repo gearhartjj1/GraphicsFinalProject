@@ -8,6 +8,7 @@
 
 #include "catmullclark.h"
 #include "Vertex.h"
+#include "HalfEdge.h"
 
 #include <map>
 using std::map;
@@ -86,5 +87,8 @@ void catmullclark(Mesh &mesh, int iterations) {
 			idx[j] = to[idx[j]];
 	}
 
-
+	HalfEdge he(mesh);
+	he.subdivide(iterations);
+	mesh = he.tofacelist();
+	mesh.triangulate();
 }
