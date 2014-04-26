@@ -100,6 +100,10 @@ HalfEdge& HalfEdge::operator= (const HalfEdge &o) {
 
 	// Think prokaryotic fission when you read the following code
 
+	// What's really interesting about this is that you have to 
+	//  modify the original object in order to copy it.
+	// Then you just change it back once you're done.
+
 	// zigzag the next pointers with new links!
 	for(int i=0; i < (int)f.size(); ++i) {
 		link *start = o.f[i]->p;
