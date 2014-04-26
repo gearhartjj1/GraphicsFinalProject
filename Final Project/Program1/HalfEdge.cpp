@@ -84,15 +84,52 @@ HalfEdge::HalfEdge(const HalfEdge &o) {
 	*this = o;
 }
 
+// O(N+M*x), where N is number of vertices, M is number of faces, 
+//  and x is max number of vertices per face
 HalfEdge& HalfEdge::operator= (const HalfEdge &o) {
 	f.resize(o.f.size(), 0);
 	v.resize(o.v.size(), 0);
-	for(int i=0; i < (int)f.size(); ++i)
+	for(int i=0; i < (int)f.size(); ++i) {
 		f[i] = new face(*o.f[i]);
-	for(int i=0; i < (int)v.size(); ++i)
+		f[i]->p = 0;
+	}
+	for(int i=0; i < (int)v.size(); ++i) {
 		v[i] = new vertex(*o.v[i]);
+		v[i]->p = 0;
+	}
 
-	//TODO: finish
+	// Think prokaryotic fission when you read the following code
+
+	// zigzag the next pointers with new links!
+	for(int i=0; i < (int)f.size(); ++i) {
+		link *start = o.f[i]->p;
+		link *cur = start;
+		do {
+			link *next = cur->next;
+			cur->next = new link;
+			cur->next->next = next;
+			cur = next;
+		} while(cur != start);
+	}
+	// now line everything up and split them apart!
+	for(int i=0; i < (int)f.size(); ++i) {
+		link *start = o.f[i]->p;
+		link *cur = start;
+		do {
+			link *cp = cur->next;
+			link *next = cp->next;
+			cp->sym = cur->sym->next;
+			cp->next = next->next;
+			cp->v = v[cur->v->id];
+			cp->f = f[cur->f->id];
+			
+			v[cur->v->id]->p = cp;
+			f[cur->f->id]->p = cp;
+
+			cur->next = next;//repair what we copied from
+			cur = next;
+		} while(cur != start);
+	}
 
 	return *this;
 }
