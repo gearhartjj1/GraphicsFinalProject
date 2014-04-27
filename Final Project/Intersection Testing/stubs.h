@@ -28,6 +28,7 @@ double Test_RaySphereIntersect(const vec3& P0, const vec3& V0, const mat4& T);
 // triangle instead. The parameters p1, p2, and p3 specify the three
 // points of the triangle, in object space.
 double Test_RayPolyIntersect(const vec3& P0, const vec3& V0, const vec3& p1, const vec3& p2, const vec3& p3, const mat4& T);
+double calculateArea(const vec3& p1, const vec3& p2, const vec3& p3);
 
 // This is just like Test_RaySphereIntersect, but with a unit cube instead of a
 // sphere. A unit cube extends from -0.5 to 0.5 in all axes.
