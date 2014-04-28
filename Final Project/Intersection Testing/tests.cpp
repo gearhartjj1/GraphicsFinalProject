@@ -191,6 +191,15 @@ void RunRayCubeTests() {
 
 void RunYourTests() {
 	// It can be very useful to put tests of your own here. The unit tests above do NOT test everything!
+	
+	RunTest(
+		"Triangle behind ray",
+		Test_RayPolyIntersect(ZERO_VECTOR, NEGZ_VECTOR, vec3(-1.f, 0.f, 10.f), vec3(0.f, 1.f, 10.f), vec3(1.f, 0.f, 10.f), IDENTITY_MATRIX),
+		-1.0);
+	RunTest(
+		"Triangle on ray origin",
+		Test_RayPolyIntersect(ZERO_VECTOR, NEGZ_VECTOR, vec3(-1.f, 0.f, 0.f), vec3(0.f, 1.f, 0.f), vec3(1.f, 0.f, 0.f), IDENTITY_MATRIX),
+		-1.0);
 }
 
 void RunGradingTests() {

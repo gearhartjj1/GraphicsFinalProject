@@ -33,8 +33,10 @@ double Test_RayPolyIntersect(const vec3& P0, const vec3& V0, const vec3& p1, con
 
 	localV0 +=localP0;
 	double equationBottom = glm::dot(normal,(localV0-localP0));
-	if(equationBottom == 0) return -1;
+	if(abs(equationBottom) < EPS) return -1;
 	t = equationTop/equationBottom;
+
+	if(t < EPS) return -1;
 
 	glm::vec3 intersect = localP0 + (localV0-localP0)*(float)t;
 	//calculate area of each sub-triangle
@@ -43,7 +45,7 @@ double Test_RayPolyIntersect(const vec3& P0, const vec3& V0, const vec3& p1, con
 	double area2 = calculateArea(intersect,p3,p1) / totalArea;
 	double area3 = calculateArea(intersect,p1,p2) / totalArea;
 	//check if the point is in the triangle
-	if((area1+area2+area3)!=1)
+	if(abs((area1+area2+area3)-1) >= EPS)
 	{
 		return -1;
 	}
