@@ -20,6 +20,9 @@ using std::make_pair;
 using namespace glm;
 
 
+namespace { const float EPS = 1e-12; }
+
+
 HalfEdge::HalfEdge() {
 
 }
@@ -276,11 +279,28 @@ void HalfEdge::subdivide(int iterations) {
 			x->v.position *= float(cnt-2)/float(cnt);
 			x->v.position.w = 1;
 			sum.w = 0;
-			x->v.position += sum /= float(cnt*cnt);
+			x->v.position += sum / float(cnt*cnt);
 		}
 
 		// Divide the faces
+		for(int i=0; i < (int)f.size(); ++i) {
+			link *start = f[i]->p;
+			link *cur = start;
+			do {
 
+				cur = cur->next->next;
+			} while(cur != start);
+		}
+
+		// Add new vertices to mesh
+		for(int i=0; i < (int)facev.size(); ++i) {
+			facev[i]->id = v.size();
+			v.push_back(facev[i]);
+		}
+		for(int i=0; i < (int)edgev.size(); ++i) {
+			edgev[i]->id = v.size();
+			v.push_back(edgev[i]);
+		}
 	}
 
 	updatenormals();
@@ -288,5 +308,36 @@ void HalfEdge::subdivide(int iterations) {
 
 
 void HalfEdge::updatenormals() {
+	for(int i=0; i < (int)v.size(); ++i)
+		v[i]->v.normal = vec4(0.f);
 
+	for(int i=0; i < (int)f.size(); ++i) {
+		link *start = f[i]->p;
+		link *cur = start;
+
+		const vec4 &a = cur->v->v.position;
+		const vec4 &b = cur->next->v->v.position;
+		vec4 normal;
+
+		cur = cur->next->next;
+		do {
+			const vec4 &c = cur->v->v.position;
+			normal = vec4(cross(vec3(b-a), vec3(c-a)), 0);
+			if(length(normal) >= EPS) {
+				normal = normalize(normal);
+				break;
+			}
+			cur = cur->next;
+		} while(cur != start);
+		assert(cur != start);
+
+		cur = start;
+		do {
+			cur->v->v.normal += normal;
+			cur = cur->next;
+		} while(cur != start);
+	}
+
+	for(int i=0; i < (int)v.size(); ++i)
+		v[i]->v.normal = normalize(v[i]->v.normal);
 }
