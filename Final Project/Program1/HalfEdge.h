@@ -41,4 +41,7 @@ public:
 
 	Mesh tofacelist() const;
 	void subdivide(int iterations);
+
+private:
+	void updatenormals();
 };

@@ -15,6 +15,10 @@ using std::vector;
 using std::pair;
 using std::make_pair;
 
+#include "glm//glm.hpp"
+
+using namespace glm;
+
 
 HalfEdge::HalfEdge() {
 
@@ -178,5 +182,92 @@ Mesh HalfEdge::tofacelist() const {
 }
 
 void HalfEdge::subdivide(int iterations) {
+	// And now for the Catmull-Clark algorithm, finally
+
+	// Flag newly created vertices with negative ids
+
+	for(int iter=0; iter < iterations; ++iter) {
+		
+		// Add face vertices
+		vector<vertex*> facev;
+		for(int i=0; i < (int)f.size(); ++i) {
+			vec4 pos(0.f);
+			link *start = f[i]->p;
+			link *cur = start;
+			int cnt=0;
+			do {
+				pos += cur->v->v;
+				++cnt;
+				cur = cur->next;
+			} while(cur != start);
+			pos /= float(cnt);
+			pos.w = 1;
+
+			vertex *v = new vertex;
+			v->id = -int(facev.size());
+			v->v.position = pos;
+			v->v.color = f[i]->p->v->v.color;//for now; could also average colors
+			v->p = 0;
+			facev.push_back(v);
+		}
+
+		// Add edge vertices
+		vector<vertex*> edgev;
+		for(int i=0; i < (int)f.size(); ++i) {
+			link *start = f[i]->p;
+			link *cur = start;
+			do {
+				if(cur->next->v->id >= 0) {
+					vec4 pos = facev[cur->f->id]->v.position + facev[cur->sym->f->id]->v.position;
+					pos += cur->v->v.position + cur->next->v->v.position;
+					pos /= 4.f;
+					pos.w = 1;
+
+					vertex *v = new vertex;
+					v->id = -(int)edgev.size();
+					v->v.position = pos;
+					v->v.color = cur->v->v.color;//for now; could also average colors
+					v->p = 0;
+					edgev.push_back(v);
+					
+					{
+						link *next = cur->next;
+						link *forward = new link;
+						link *backward = new link;
+
+						forward->sym = backward;
+						backward->sym = forward;
+
+						cur->next = forward;
+						forward->next = next;
+						next->sym->next = backward;
+						backward->next = cur->sym;
+
+						forward->v = cur->v;
+						backward->v = v;
+						cur->v = v;
+						v->p = cur;
+
+						forward->f = cur->f;
+						backward->f = cur->sym->f;
+					}
+				}
+
+				cur = cur->next->next;
+			} while(cur != start);
+		}
+
+		// Smooth the original vertices
+
+
+		// Divide the faces
+
+	}
+
+	updatenormals();
+}
+
+
+void HalfEdge::updatenormals() {
 
 }
