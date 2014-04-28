@@ -199,7 +199,7 @@ void HalfEdge::subdivide(int iterations) {
 			link *cur = start;
 			int cnt=0;
 			do {
-				pos += cur->v->v;
+				pos += cur->v->v.position;
 				++cnt;
 				cur = cur->next;
 			} while(cur != start);
