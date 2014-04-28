@@ -204,7 +204,7 @@ void HalfEdge::subdivide(int iterations) {
 			pos.w = 1;
 
 			vertex *v = new vertex;
-			v->id = -int(facev.size());
+			v->id = -int(facev.size())-1;
 			v->v.position = pos;
 			v->v.color = f[i]->p->v->v.color;//for now; could also average colors
 			v->p = 0;
@@ -224,7 +224,7 @@ void HalfEdge::subdivide(int iterations) {
 					pos.w = 1;
 
 					vertex *v = new vertex;
-					v->id = -(int)edgev.size();
+					v->id = -(int)edgev.size()-1;
 					v->v.position = pos;
 					v->v.color = cur->v->v.color;//for now; could also average colors
 					v->p = 0;
@@ -258,7 +258,26 @@ void HalfEdge::subdivide(int iterations) {
 		}
 
 		// Smooth the original vertices
+		for(int i=0; i < (int)v.size(); ++i) {
+			vertex *x = v[i];
+			vec4 sum(0.f);
+			int cnt=0;
+			link *start = x->p;
+			link *cur = start;
+			do {
+				sum += cur->sym->v->v.position;
+				assert(cur->f->id < 0);
+				sum += facev[-cur->f->id-1]->v.position;
+				++cnt;
+				cur = cur->next->sym;
+			} while(cur != start);
 
+			assert(cnt >= 3);
+			x->v.position *= float(cnt-2)/float(cnt);
+			x->v.position.w = 1;
+			sum.w = 0;
+			x->v.position += sum /= float(cnt*cnt);
+		}
 
 		// Divide the faces
 
