@@ -73,12 +73,17 @@ HalfEdge::HalfEdge(const Mesh &mesh) {
 	// Assign the sym pointers
 	// O(N*x^2), where N is # vertices and x is the maximum # of vertices per face
 	for(int i=0; i < (int)adj.size(); ++i) {
+		assert(adj[i].size() % 2 == 0);
+		vector<bool> hit(adj[i].size(), false);
 		for(int j=0; j < (int)adj[i].size(); ++j) {
+			if(hit[j]) continue;
+			hit[j]=true;
 			int cnt=0;
 			for(int k=j+1; k < (int)adj[i].size(); ++k) {
 				if(adj[i][j].first == adj[i][k].first) {
 					adj[i][j].second->sym = adj[i][k].second;
 					adj[i][k].second->sym = adj[i][j].second;
+					hit[k]=true;
 					++cnt;
 				}
 			}
