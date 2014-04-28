@@ -283,13 +283,53 @@ void HalfEdge::subdivide(int iterations) {
 		}
 
 		// Divide the faces
-		for(int i=0; i < (int)f.size(); ++i) {
-			link *start = f[i]->p;
-			link *cur = start;
-			do {
+		{
+			// Add new links
+			for(int i=0; i < (int)f.size(); ++i) {
+				link *start = f[i]->p;
+				link *cur = start;
+				do {
+					link *next = cur->next->next;
+					link *a = new link;
+					link *b = new link;
+					a->sym = b;
+					b->sym = a;
+					a->v = facev[i];
+					b->v = cur->next->v;
+					facev[i]->p = a;
+					cur->next = a;
+					b->next = next;
+					cur = next;
+				} while(cur != start);
+			}
 
-				cur = cur->next->next;
-			} while(cur != start);
+			// Connect up the new links in a cycle
+			for(int i=0; i < (int)f.size(); ++i) {
+				link *start = f[i]->p;
+				link *cur = start;
+				do {
+					link *b = cur->next->sym;
+					link *a = b->next->next->next;
+					a->next = b;
+					cur = b->next->next;
+				} while(cur != start);
+			}
+
+			// Add new faces
+			int n=f.size();
+			for(int i=0; i < n; ++i) {
+				f[i]->p = facev[i]->p;
+				link *start = f[i]->p;//start is an 'a' -- ie, a link that points to facev[i]
+				link *cur = start->next->sym;
+				// skip the first one; that is what f[i] will become
+				while(cur != start) {
+					face *add = new face;
+					add->id = f.size();
+					add->p = cur;
+					f.push_back(add);
+					cur = cur->next->sym;
+				}
+			}
 		}
 
 		// Add new vertices to mesh
@@ -322,7 +362,7 @@ void HalfEdge::updatenormals() {
 		cur = cur->next->next;
 		do {
 			const vec4 &c = cur->v->v.position;
-			normal = vec4(cross(vec3(b-a), vec3(c-a)), 0);
+			normal = vec4(cross(vec3(c-a), vec3(b-a)), 0);// Jake's facelists are CW
 			if(length(normal) >= EPS) {
 				normal = normalize(normal);
 				break;
