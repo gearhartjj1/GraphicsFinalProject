@@ -93,12 +93,20 @@ HalfEdge::HalfEdge(const Mesh &mesh) {
 }
 
 HalfEdge::HalfEdge(const HalfEdge &o) {
-	*this = o;
+	docopy(o, true);
 }
 
 // O(N+M*x), where N is number of vertices, M is number of faces, 
 //  and x is max number of vertices per face
 HalfEdge& HalfEdge::operator= (const HalfEdge &o) {
+	docopy(o, false);
+	return *this;
+}
+
+void HalfEdge::docopy(const HalfEdge &o, bool cc) {
+	if(!cc)
+		clear();
+
 	f.resize(o.f.size(), 0);
 	v.resize(o.v.size(), 0);
 	for(int i=0; i < (int)f.size(); ++i) {
@@ -146,11 +154,13 @@ HalfEdge& HalfEdge::operator= (const HalfEdge &o) {
 			cur = next;
 		} while(cur != start);
 	}
-
-	return *this;
 }
 
 HalfEdge::~HalfEdge() {
+	clear();
+}
+
+void HalfEdge::clear() {
 	for(int i=0; i < (int)f.size(); ++i) {
 		link *start=f[i]->p;
 		link *cur = start;
@@ -164,6 +174,8 @@ HalfEdge::~HalfEdge() {
 		delete f[i];
 	for(int i=0; i < (int)v.size(); ++i)
 		delete v[i];
+	f.clear();
+	v.clear();
 }
 
 Mesh HalfEdge::tofacelist() const {

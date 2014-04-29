@@ -44,6 +44,7 @@ Face::Face(const Face &original)
 Face& Face::operator= (const Face &source)
 {
 	numVertices = source.numVertices;
+	delete indices;
 	indices = new unsigned int[numVertices];
 	for(int i = 0; i < numVertices; i++)
 	{
@@ -62,25 +63,19 @@ Mesh::Mesh() {
 
 Mesh::Mesh(const Mesh &original)
 {
-	filled = original.filled;
-	buffered = original.buffered;
-	verticesPerFace = original.verticesPerFace;
-	setColor(glm::vec3(1.0,1.0,1.0));
-	startY = original.startY;
-	for(int i = 0; i < original.getVertices().size(); i++)
-	{
-		Vertex* v = new Vertex(original.getVertices()[i]->position,original.getVertices()[i]->color,original.getVertices()[i]->normal);
-		vertices.push_back(v);
-	}
-	for(int i = 0; i < original.getFaces().size();i++)
-	{
-		Face*  f = new Face(*original.getFaces()[i]);
-		faces.push_back(f);
-	}
+	docopy(original, true);
 }
 
 Mesh& Mesh::operator= (const Mesh &source)
 {
+	docopy(source, false);
+	return *this;
+}
+
+void Mesh::docopy(const Mesh &source, bool cc) {
+	if(!cc)
+		clear();
+
 	filled = source.filled;
 	buffered = source.buffered;
 	verticesPerFace = source.verticesPerFace;
@@ -96,7 +91,6 @@ Mesh& Mesh::operator= (const Mesh &source)
 		Face*  f = new Face(*source.getFaces()[i]);
 		faces.push_back(f);
 	}
-	return *this;
 }
 
 //constructor builds the mesh from the given file
@@ -128,6 +122,11 @@ Mesh::Mesh(string fileName)
 
 Mesh::~Mesh()
 {
+	clear();
+}
+
+void Mesh::clear()
+{
 	for(int i = 0; i < vertices.size(); i++)
 	{
 		if(vertices[i])
@@ -138,6 +137,11 @@ Mesh::~Mesh()
 		if(faces[i])
 			delete faces[i];
 	}
+	vertices.clear();
+	faces.clear();
+	filled = buffered = false;
+	verticesPerFace = 3;
+	startY = 0;
 }
 
 //expects a pointer to a filestream that is open to an input file

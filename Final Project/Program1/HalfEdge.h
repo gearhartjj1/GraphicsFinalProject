@@ -41,7 +41,9 @@ public:
 
 	Mesh tofacelist() const;
 	void subdivide(int iterations);
+	void clear();
 
 private:
 	void updatenormals();
+	void docopy(const HalfEdge&, bool);
 };

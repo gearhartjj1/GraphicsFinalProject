@@ -49,6 +49,7 @@ public:
 	bool getFilled() {return filled;}
 	void bufferData(glm::vec3 c);
 	void triangulate();//triangulate the mesh, assuming every face is convex & planar
+	void clear();
 private:
 	bool filled;
 	bool buffered;
@@ -58,6 +59,7 @@ private:
 	void extrude(double height, glm::vec3 base[], int numPoints);
 	void surfRev(int numSlices, glm::vec3 linePoints[], int numPoints);
 	void makePolygon(glm::vec3 base[], int numPoints);
+	void docopy(const Mesh&, bool);
 
 	vector<Vertex*> vertices;//this will be buffered into the shader
 	vector<Face*> faces;//this will function as the index buffer indices
