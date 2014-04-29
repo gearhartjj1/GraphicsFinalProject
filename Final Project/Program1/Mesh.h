@@ -47,6 +47,7 @@ public:
 	int getNumFaces() {return faces.size();}
 	int getVerticesPerFace() {return verticesPerFace;}
 	bool getFilled() {return filled;}
+	void setFilled(bool filled) { this->filled = filled; }
 	void bufferData(glm::vec3 c);
 	void triangulate();//triangulate the mesh, assuming every face is convex & planar
 	void clear();

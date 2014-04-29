@@ -81,6 +81,7 @@ HalfEdge::HalfEdge(const Mesh &mesh) {
 			int cnt=0;
 			for(int k=j+1; k < (int)adj[i].size(); ++k) {
 				if(adj[i][j].first == adj[i][k].first) {
+					assert(adj[i][j].second != adj[i][k].second);
 					adj[i][j].second->sym = adj[i][k].second;
 					adj[i][k].second->sym = adj[i][j].second;
 					hit[k]=true;
@@ -90,6 +91,9 @@ HalfEdge::HalfEdge(const Mesh &mesh) {
 			assert(cnt==1);
 		}
 	}
+
+	if(!checkvertexcircling())
+		assert(false && "failed vertex circling");
 }
 
 HalfEdge::HalfEdge(const HalfEdge &o) {
@@ -198,6 +202,7 @@ Mesh HalfEdge::tofacelist() const {
 			mesh.getFaces()[i]->indices[j] = c[j];
 	}
 
+	mesh.setFilled(true);
 	return mesh;
 }
 
@@ -237,45 +242,54 @@ void HalfEdge::subdivide(int iterations) {
 			link *start = f[i]->p;
 			link *cur = start;
 			do {
-				if(cur->next->v->id >= 0) {
-					vec4 pos = facev[cur->f->id]->v.position + facev[cur->sym->f->id]->v.position;
-					pos += cur->v->v.position + cur->next->v->v.position;
-					pos /= 4.f;
-					pos.w = 1;
+				vec4 pos = facev[cur->f->id]->v.position + facev[cur->sym->f->id]->v.position;
+				pos += cur->v->v.position + cur->next->v->v.position;
+				pos /= 4.f;
+				pos.w = 1;
 
+				link *next = cur->next;
+
+				if(cur->sym->v->id < 0) {
+					vertex *v = cur->sym->v;
+
+					link *add = new link;
+					cur->next = add;
+					add->next = next;
+					add->sym = cur->sym;
+					add->sym->sym = add;
+					add->v = cur->v;
+					cur->v = v;
+					add->v->p = add;
+					cur->v->p = cur;
+					cur->sym = add->sym->next;
+					assert(cur->sym->sym == 0);
+					cur->sym->sym = cur;
+					add->f = cur->f;
+				} else {
 					vertex *v = new vertex;
 					v->id = -(int)edgev.size()-1;
 					v->v.position = pos;
 					v->v.color = cur->v->v.color;//for now; could also average colors
 					v->p = 0;
 					edgev.push_back(v);
-					
-					{
-						link *next = cur->next;
-						link *forward = new link;
-						link *backward = new link;
 
-						forward->sym = backward;
-						backward->sym = forward;
-
-						cur->next = forward;
-						forward->next = next;
-						next->sym->next = backward;
-						backward->next = cur->sym;
-
-						forward->v = cur->v;
-						backward->v = v;
-						cur->v = v;
-						v->p = cur;
-
-						forward->f = cur->f;
-						backward->f = cur->sym->f;
-					}
+					link *add = new link;
+					cur->next = add;
+					add->next = next;
+					add->sym = 0;
+					add->v = cur->v;
+					cur->v = v;
+					add->v->p = add;
+					cur->v->p = cur;//(link*)0xc001;//cur
+					add->f = cur->f;
 				}
 
-				cur = cur->next->next;
+				cur = next;
 			} while(cur != start);
 		}
+
+		if(!checkwindingorder())
+			assert(false && "check winding order failed");
 
 		// Smooth the original vertices
 		for(int i=0; i < (int)v.size(); ++i) {
@@ -285,18 +299,21 @@ void HalfEdge::subdivide(int iterations) {
 			link *start = x->p;
 			link *cur = start;
 			do {
+				assert(cur->sym->v != x);
+				assert(cur->v == x);
 				sum += cur->sym->v->v.position;
-				assert(cur->f->id < 0);
-				sum += facev[-cur->f->id-1]->v.position;
+				assert(cur->f->id >= 0);
+				sum += facev[cur->f->id]->v.position;
 				++cnt;
 				cur = cur->next->sym;
 			} while(cur != start);
 
-			assert(cnt >= 3);
-			x->v.position *= float(cnt-2)/float(cnt);
-			x->v.position.w = 1;
-			sum.w = 0;
-			x->v.position += sum / float(cnt*cnt);
+			if(cnt >= 3) {
+				x->v.position *= float(cnt-2)/float(cnt);
+				x->v.position.w = 1;
+				sum.w = 0;
+				x->v.position += sum / float(cnt*cnt);
+			}
 		}
 
 		// Divide the faces
@@ -307,15 +324,18 @@ void HalfEdge::subdivide(int iterations) {
 				link *cur = start;
 				do {
 					link *next = cur->next->next;
+
 					link *a = new link;
 					link *b = new link;
 					a->sym = b;
 					b->sym = a;
-					a->v = facev[i];
-					b->v = cur->next->v;
+					a->v = facev[i];//(vertex*)0xa;//facev[i]
+					b->v = cur->v;//(vertex*)0xb;//cur->v
 					facev[i]->p = a;
+					b->next = cur->next;
 					cur->next = a;
-					b->next = next;
+					a->next = 0;
+
 					cur = next;
 				} while(cur != start);
 			}
@@ -397,4 +417,32 @@ void HalfEdge::updatenormals() {
 
 	for(int i=0; i < (int)v.size(); ++i)
 		v[i]->v.normal = normalize(v[i]->v.normal);
+}
+
+
+bool HalfEdge::checkwindingorder() const {
+	// Verify that every polygon has the same winding order (assuming everything else is correct)
+	for(int i=0; i < (int)f.size(); ++i) {
+		link *start = f[i]->p;
+		link *cur = start;
+		do {
+			if(cur->v == cur->sym->v) return false;
+			cur = cur->next;
+		} while(cur != start);
+	}
+	return true;
+}
+
+bool HalfEdge::checkvertexcircling() const {
+	// Verify that circling around a vertex works correctly
+	for(int i=0; i < (int)v.size(); ++i) {
+		vertex *x = v[i];
+		link *start = x->p;
+		link *cur = start;
+		do {
+			if(cur->sym->v == x || cur->v != x) return false;
+			cur = cur->next->sym;
+		} while(cur != start);
+	}
+	return true;
 }

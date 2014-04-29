@@ -41,9 +41,12 @@ public:
 
 	Mesh tofacelist() const;
 	void subdivide(int iterations);
+	void updatenormals();
 	void clear();
 
+	bool checkwindingorder() const;
+	bool checkvertexcircling() const;
+
 private:
-	void updatenormals();
 	void docopy(const HalfEdge&, bool);
 };
