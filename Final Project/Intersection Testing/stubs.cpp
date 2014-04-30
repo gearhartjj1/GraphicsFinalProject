@@ -23,8 +23,8 @@ double Test_RaySphereIntersect(const vec3& P0, const vec3& V0, const mat4& T) {
 	if(b*b-4*a*c < 0) {return -1;}
 	t0 = (-b+sqrt(b*b-4*a*c))/2/a;
 	t1 = (-b-sqrt(b*b-4*a*c))/2/a;
-	if(0<t0<t1+EPS) {return t0;}
-	else if(0<t1<t0+EPS) {return t1;}
+	if(0 < t0 && t0 < t1) {return t0;}
+	else if(0 < t1 && t1 < t0) {return t1;}
 	else {return -1;}
 }
 
