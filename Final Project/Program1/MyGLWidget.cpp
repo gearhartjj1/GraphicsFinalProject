@@ -17,8 +17,8 @@ MyGLWidget::~MyGLWidget() {
 	delete baseCube;
 	delete chair;
 	delete table;
-	delete testMesh;
-	delete testMesh2;
+	//delete testMesh;
+	//delete testMesh2;
 }
 
 void MyGLWidget::initializeGL() {
@@ -27,8 +27,8 @@ void MyGLWidget::initializeGL() {
 	table = new Table(baseCube);
 	scene = new SceneGraph();
 
-	testMesh = new Mesh("extrusion1.dat");
-	testMesh2 = new Mesh("surfrev1.dat");
+	//testMesh = new Mesh("extrusion1.dat");
+	//testMesh2 = new Mesh("surfrev1.dat");
 
 	glewInit();
 	glEnable(GL_DEPTH_TEST);
@@ -80,7 +80,7 @@ void MyGLWidget::initializeGL() {
 	Geometry::setIbo(ibo);
 
 	baseCube->bufferData();
-	testMesh->bufferData(glm::vec3(1,1,1));;
+	//testMesh->bufferData(glm::vec3(1,1,1));;
 
 	scene->setCube(baseCube);
 	scene->setChair(chair);

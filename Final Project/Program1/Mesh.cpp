@@ -344,7 +344,23 @@ void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
 				side[2] = newPoints[0];
 			}
 			side[3] = newPoints[j];
-			makePolygon(side,4);
+			int numPts = 4;
+			//do detections to make sure it is a square side or a triangle side
+			//check if the middle points are the same
+			if((side[1].x>side[2].x-0.00001 || side[1].x<side[2].x+0.00001) && (side[1].y>side[2].y-0.00001 || side[1].y<side[2].y+0.00001) && (side[1].z>side[2].z-0.0001 || side[1].z<side[2].z+0.0001))
+			{
+				side[2].x = side[3].x;
+				side[2].y = side[3].y;
+				side[2].z = side[3].z;
+				numPts = 3;
+			}
+			//check if the first and last points are the same
+			if(side[0].x==side[3].x && side[0].y==side[3].y && side[0].z==side[3].z)
+			{
+				numPts = 3;
+			}
+
+			makePolygon(side,numPts);
 		}
 		originalPoints = newPoints;
 		//delete[] newPoints;
