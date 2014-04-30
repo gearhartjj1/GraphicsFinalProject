@@ -12,20 +12,20 @@ double Test_RaySphereIntersect(const vec3& P0, const vec3& V0, const mat4& T) {
 	// See the documentation of this function in stubs.h.
 
 	mat4 inv = inverse(T);
-	vec4 p = vec4(P0	, 1), v = vec4(V0, 0);
+	vec4 p = vec4(P0, 1), v = vec4(V0, 0);
 	p = inv*p;
 	v = inv*v;
-	int a = 1;
-	vec4 b = 2*v*p;
-	vec4 c = p*p;
-	
 	double t0=0, t1=0;
+	double a = 1;
+	double b = 2*dot(vec3(v), vec3(p));
+	double c = length(vec3(p))*length(vec3(p))-1;
+	
+	if(b*b-4*a*c < 0) {return -1;}
 	t0 = (-b+sqrt(b*b-4*a*c))/2/a;
 	t1 = (-b-sqrt(b*b-4*a*c))/2/a;
 	if(0<t0<t1+EPS) {return t0;}
-	if(0<t1<t0+EPS) {return t1;}
-	
-	return -1;
+	else if(0<t1<t0+EPS) {return t1;}
+	else {return -1;}
 }
 
 double Test_RayPolyIntersect(const vec3& P0, const vec3& V0, const vec3& p1, const vec3& p2, const vec3& p3, const mat4& T) {
