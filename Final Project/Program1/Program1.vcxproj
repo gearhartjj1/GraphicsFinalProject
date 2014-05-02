@@ -75,6 +75,7 @@
     <ClCompile Include="catmullclark.cpp" />
     <ClCompile Include="Chair.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="EasyBMP.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_inputLine.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -102,6 +103,7 @@
     <ClCompile Include="geometry.cpp" />
     <ClCompile Include="HalfEdge.cpp" />
     <ClCompile Include="inputLine.cpp" />
+    <ClCompile Include="intersections.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MyGLWidget.cpp" />
@@ -139,6 +141,7 @@
     <ClInclude Include="catmullclark.h" />
     <ClInclude Include="Chair.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="EasyBMP.h" />
     <ClInclude Include="GeneratedFiles\ui_program1.h" />
     <ClInclude Include="geometry.h" />
     <CustomBuild Include="inputLine.h">
@@ -152,6 +155,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtWidgets"</Command>
     </CustomBuild>
     <ClInclude Include="HalfEdge.h" />
+    <ClInclude Include="intersections.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="Vertex.h" />

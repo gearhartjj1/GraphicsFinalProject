@@ -30,6 +30,7 @@ SceneGraph::SceneGraph()
 	selectedIndex = 0;
 	nextIndex = 0;
 	parent = 0;
+	reflectivity = 0;
 }
 
 SceneGraph::~SceneGraph()
@@ -68,6 +69,7 @@ SceneGraph::SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm
 	nextIndex = 0;
 	selectedIndex = 0;
 	parent = 0;
+	reflectivity = 0;
 }
 
 void SceneGraph::traverse(glm::mat4 m) const
@@ -331,4 +333,61 @@ SceneGraph* SceneGraph::getPreviousNode(SceneGraph* current)
 	//if you reached the beginning go to the end and try again
 	nextIndex = width * depth;
 	return getPreviousNode(current);
+}
+
+//do intersection testing for all items and find the first hit and continue calculations from there
+//need to start by checking every object and seeing which gets hit first
+bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color)
+{
+	double t = std::numeric_limits<double>::infinity();
+	glm::vec3 c = glm::vec3(0.0f);
+	glm::vec4 n = glm::vec4(1.0f);
+	for(int i = 0; i < width*depth; i++)
+	{
+		glm::vec3 tempC;
+		glm::vec4 tempN;
+		double time = -1;
+		if(children[i])
+			time = rayTraceStack(children[i],Position,direction,tempC,tempN);
+		if(time>0 && time < t)
+		{
+			t = time;
+			c = tempC;
+			n = tempN;
+		}
+	}
+
+	//do color calculations with the correct color and normal value then return the color
+	color = c;
+
+
+	return true;
+}
+
+//recurses through a stack of geometry and returns the time of the closest hit time and sets the color and normal of that point
+double SceneGraph::rayTraceStack(SceneGraph* node, glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal)
+{
+	double t = std::numeric_limits<double>::infinity();
+	glm::vec3 tempC = glm::vec3(0.0f);
+	glm::vec4 tempN = glm::vec4(1.0f);
+	//rayTraces the particular node
+	double time = node->geo->rayTrace(Position,direction,tempC,tempN);
+	//check if there are more children
+	if(node->children[0])
+	{
+		//see if the time is less than the childrens time
+		if(time>0 && time<(rayTraceStack(node->children[0],Position,direction,color,normal)))
+		{
+			t = time;
+			color = tempC;
+			normal = tempN;
+		}
+	}
+	else
+	{
+		color = tempC;
+		normal = tempN;
+		t = time;
+	}
+	return t;
 }

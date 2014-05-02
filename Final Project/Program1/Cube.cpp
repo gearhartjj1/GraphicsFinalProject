@@ -58,63 +58,13 @@ Cube::Cube()
 
 	for(int i = 20; i < 24; i++)
 		cubeNormals[i] = glm::vec4(1,0,0,0);
-
-	/*for(int i = 0; i < 24; i++)
-	{
-		cubeColors[i] = glm::vec3(1,0,0);
-	}*/
-
-	/*for(int i = 0; i < 4; i++)
-	{
-		if((i+1)%2==0)
-		{
-			cubeColors[i] = glm::vec3(0.5,0,0);
-		}
-		else
-		{
-			cubeColors[i] = glm::vec3(1,0,0);
-		}
-	}
-	for(int i = 4; i < 8; i++)
-	{
-		if((i+1)%2==0)
-			cubeColors[i] = glm::vec3(0,0.5,0);
-		else
-			cubeColors[i] = glm::vec3(0,1,0);
-	}
-	for(int i = 8; i < 12; i++)
-	{
-		if((i+1)%2==0)
-			cubeColors[i] = glm::vec3(0,0,0.5);
-		else
-			cubeColors[i] = glm::vec3(0,0,1);
-	}
-	for(int i = 12; i < 16; i++)
-	{
-		if((i+1)%2==0)
-			cubeColors[i] = glm::vec3(0.5,0.5,0);
-		else
-			cubeColors[i] = glm::vec3(1,1,0);
-	}
-	for(int i = 16; i < 20; i++)
-	{
-		if((i+1)%2==0)
-			cubeColors[i] = glm::vec3(0,0.5,0.5);
-		else
-			cubeColors[i] = glm::vec3(0,1,1);
-	}
-	for(int i = 20; i < 24; i++)
-	{
-		if((i+1)%2==0)
-			cubeColors[i] = glm::vec3(0.5,0.5,0.5);
-		else
-			cubeColors[i] = glm::vec3(1,1,1);
-	}*/
 }
 
 void Cube::draw(glm::mat4 transform, glm::vec3 color)
 {
 	bufferColor(color);
+
+	setInverse(glm::inverse(transform));
 
 	//sadly the data needs to be buffered on draw because now there shall be shapes other than cubes sad day
 	bufferData();
@@ -135,4 +85,12 @@ void Cube::bufferData()
 	glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(glm::vec4),cubeNormals,GL_STATIC_DRAW);
 	glEnableVertexAttribArray(this->getNormalLoc());
 	glVertexAttribPointer(this->getNormalLoc(),4,GL_FLOAT,GL_FALSE,0,0);
+}
+
+//how would I get the normal at the point?...
+double Cube::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal)
+{
+	double time = rayCubeIntersection(Position,direction,getInverse());
+	color = getColor();
+	return time;
 }

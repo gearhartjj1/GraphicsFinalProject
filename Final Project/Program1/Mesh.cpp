@@ -403,6 +403,7 @@ bool Mesh::testConvex(glm::vec3 points[], int numPoints)
 
 void Mesh::draw(glm::mat4 transform, glm::vec3 color)
 {
+	setInverse(glm::inverse(transform));
 	//makes sure the data has been buffered to the graphics card before attempting to draw the shape
 	bufferData(color);
 	if(!buffered)
@@ -417,6 +418,25 @@ void Mesh::draw(glm::mat4 transform, glm::vec3 color)
 
 	glUniformMatrix4fv(getModelLoc(), 1, GL_FALSE, &t[0][0]);
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+}
+
+//need way to find normal of the given point
+double Mesh::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal)
+{
+	double t = std::numeric_limits<double>::infinity();
+	for(int i = 0; i < faces.size(); i++)
+	{
+		glm::vec3 P0(vertices[faces[i]->indices[0]]->position);
+		glm::vec3 P1(vertices[faces[i]->indices[1]]->position);
+		glm::vec3 P2(vertices[faces[i]->indices[2]]->position);
+		double time = rayTriangleIntersection(Position,direction,P0,P1,P2,getInverse());
+		if(time > 0 && time < t)
+		{
+			t = time;
+			color = getColor();
+		}
+	}
+	return t;
 }
 
 void Mesh::bufferData(glm::vec3 c)

@@ -13,6 +13,7 @@ class Cube : public Geometry
 {
 public:
 	virtual void draw(glm::mat4 transform, glm::vec3 color);
+	virtual double rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal);
 	void bufferData();
 	Cube();
 private:

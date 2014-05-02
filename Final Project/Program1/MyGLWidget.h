@@ -38,6 +38,7 @@ public:
 	void generateGasket();
 
 	void drawMesh(Mesh* m, glm::mat4 modelMatrix, glm::vec3 color);
+	void rayTrace(string imageName,int x, int y);
 	//void drawCube();
 	//void drawChair();
 	//void drawTable();
@@ -56,6 +57,9 @@ private:
 	SceneGraph* scene;
 	SceneGraph* editNode;
 	Camera camera;
+
+	float aspectRatio;
+	float perspectiveAngle;
 
 	Mesh* testMesh;
 	Mesh* testMesh2;

@@ -43,6 +43,7 @@ public:
 	vector<Face*>& getFaces() {return faces;}
 	const vector<Face*>& getFaces() const {return faces;}
 	void draw(glm::mat4 transform, glm::vec3 color);
+	virtual double rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal);
 	int getNumVertices() {return vertices.size();}
 	int getNumFaces() {return faces.size();}
 	int getVerticesPerFace() {return verticesPerFace;}

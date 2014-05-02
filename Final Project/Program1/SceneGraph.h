@@ -35,14 +35,19 @@ public:
 	SceneGraph();
 	~SceneGraph();
 	SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm::vec3 scale, float rot);
+	
+	bool rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color);
 	void fillGraph(string inputName);
 	void traverse(glm::mat4 m) const;
 	void draw(glm::mat4 m);
 	void addChild(SceneGraph* sg, int x, int z);
 	void addChild(SceneGraph* sg, SceneGraph* parent);
 
+	//recursive functions
 	SceneGraph* getNextNode(SceneGraph* current);
 	SceneGraph* getPreviousNode(SceneGraph* current);
+	//returns the time the node is hit by the ray and the appropriate color and normal value
+	double rayTraceStack(SceneGraph* node, glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal);
 
 	//getters
 	int getWidth() {return width;}
@@ -67,6 +72,7 @@ public:
 	void setScaleY(float sY) {scaleY = sY;}
 	void setScaleZ(float sZ) {scaleZ = sZ;}
 	void setRotY(float rY) {rotY = rY;}
+	void setReflectivity(float r) {reflectivity = r;}
 	void setSelected(bool s) {selected = s;}
 	static void setCube(Cube* c) {cube = c;}
 	static void setChair(Chair* ch) {chair = ch;}
@@ -75,11 +81,14 @@ public:
 private:
 	//function to get the top of the tower
 	SceneGraph* getTowerTop(SceneGraph* current);
+	//intersection testing functions
+
 	//do not delete the geometry pointers that were given from the widget!!!
 	static Cube* cube;
 	static Chair* chair;
 	static Table* table;
 	int width, depth, numNodes;
+	float reflectivity;
 	//used to determine if the particular node is currently selected
 	bool selected;
 	//keeps track of which node section on the floor is selected

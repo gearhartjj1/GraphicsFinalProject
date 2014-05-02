@@ -8,8 +8,9 @@ Description: this is the cpp file for MyGLWidget it contains the definitions for
 #include "MyGLWidget.h"
 #include "../glm/gtc/matrix_transform.hpp"
 #include "catmullclark.h"
+#include "EasyBMP.h"
 
-MyGLWidget::MyGLWidget(QWidget* parent) : QGLWidget(parent), camera(glm::vec4(0.0f, 0.0f, 10.0f,0.0f), glm::vec4(0.0f, 0.0f, 0.0f,0.0f), glm::vec4(0.0f, 1.0f, 0.0f,0.0f)) {
+MyGLWidget::MyGLWidget(QWidget* parent) : QGLWidget(parent), camera(glm::vec4(0.0f,0.0f,10.0f,0.0f), glm::vec4(0.0f, 0.0f, 0.0f,0.0f), glm::vec4(0.0f, 1.0f, 0.0f,0.0f)) {
 	editNode = 0;
 }
 
@@ -88,6 +89,8 @@ void MyGLWidget::initializeGL() {
 
 	scene->fillGraph("sample1.txt");
 
+	rayTrace("test.bmp",800,600);
+
 	lightLocation = glm::vec4((scene->getWidth()* scene->getFloorScale())/2,5,-(scene->getDepth()*(scene->getFloorScale())/2),1);
 
 	glUseProgram(shaderProgram);
@@ -154,7 +157,9 @@ void MyGLWidget::resizeGL(int width, int height) {
 	glViewport(0, 0, width, height);
 	
 	//Here's how to make matrices for transformations, check the documentation of GLM for rotation, scaling, and translation
-	glm::mat4 projection = glm::perspective(90.0f, static_cast<float>(width) / static_cast<float>(height), 0.1f, 30.0f);
+	aspectRatio = static_cast<float>(width) / static_cast<float>(height);
+	perspectiveAngle = 90.0f;
+	glm::mat4 projection = glm::perspective(perspectiveAngle, aspectRatio, 0.1f, 30.0f);
 	//camera = glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	//Can multiply matrices together, careful about ordering!
 	
@@ -162,6 +167,46 @@ void MyGLWidget::resizeGL(int width, int height) {
 
 	//Do something similar for u_modelMatrix before rendering things
 	glUniformMatrix4fv(u_projLocation, 1, GL_FALSE, &projection[0][0]);
+}
+
+//loop through generating all rays and then for each ray raytrace the scene and get the color and make a bmp from it
+void MyGLWidget::rayTrace(string imageName, int width, int height)
+{
+	//set up bit map stuff
+	BMP output;
+	output.SetSize(width, height);
+	output.SetBitDepth(24);
+	
+	//verify that these are correct
+	glm::vec4 C = glm::normalize(camera.getRef()-camera.getPos());
+	glm::vec3 M = glm::vec3(camera.getPos()) + glm::vec3(C);
+	glm::vec3 V = tan(perspectiveAngle/2)*glm::vec3(camera.getUpV());
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f),90.0f,glm::vec3(0,0,1));
+	glm::vec4 rotV = rotation * glm::vec4(V.x,V.y,V.z,1);
+	glm::vec3 H = glm::vec3(rotV.x,rotV.y,rotV.z);
+	H*=aspectRatio;
+
+	for(int x = 0; x < width; x++)
+	{
+		for(int y = 0; y < height; y++)
+		{
+			//calculate direction of the ray
+			glm::vec3 P = M + (2*x/float(width-1)-1)*H + (2*y/float(height-1)-1)*V;
+			glm::vec3 D = glm::normalize(P-glm::vec3(camera.getPos()));
+			glm::vec3 color = glm::vec3(0,0,0);
+			scene->rayTrace(P,D,color);
+			//put the resulting color in the bmp
+			int r = glm::clamp(int(abs(color.r)*256), 0, 255);
+			int g = glm::clamp(int(abs(color.g)*256), 0, 255);
+			int b = glm::clamp(int(abs(color.b)*256), 0, 255);
+
+			output(x,y)->Red = r;
+			output(x,y)->Green = g;
+			output(x,y)->Blue = b;
+		}
+	}
+
+	output.WriteToFile(imageName.c_str());
 }
 
 //need to add code to get the indices form the mesh and draw by buffering to and using the index buffer
