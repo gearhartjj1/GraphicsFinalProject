@@ -14,6 +14,7 @@ Description: this is the header file for scenegraph it contains the declarations
 #include "Chair.h"
 #include "Table.h"
 #include "Mesh.h"
+#include "Sphere.h"
 
 #include <vector>
 using std::vector;
@@ -63,6 +64,7 @@ public:
 	double getFloorScale() {return floorScale;}
 	bool getSelected() {return selected;}
 	Geometry* getGeometry() {return geo;}
+	void setGeometry(Geometry *g) { geo = g; }
 
 	//setters
 	void setTransX(float tX) {transX = tX;}
@@ -77,6 +79,7 @@ public:
 	static void setCube(Cube* c) {cube = c;}
 	static void setChair(Chair* ch) {chair = ch;}
 	static void setTable(Table* tb) {table = tb;}
+	static void setSphere(Sphere* sp) {sphere = sp;}
 
 private:
 	//function to get the top of the tower
@@ -87,6 +90,7 @@ private:
 	static Cube* cube;
 	static Chair* chair;
 	static Table* table;
+	static Sphere* sphere;
 	int width, depth, numNodes;
 	float reflectivity;
 	//used to determine if the particular node is currently selected

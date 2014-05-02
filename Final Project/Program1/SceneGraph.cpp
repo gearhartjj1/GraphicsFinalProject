@@ -11,6 +11,7 @@ Description: this is scenegraph.cpp it contains the implementation for the scene
 Cube* SceneGraph::cube;
 Chair* SceneGraph::chair;
 Table* SceneGraph::table;
+Sphere* SceneGraph::sphere;
 
 SceneGraph::SceneGraph()
 {
@@ -236,6 +237,10 @@ void SceneGraph::fillGraph(string inputName)
 			int numDivides = 0;
 			fin >> numDivides;
 			//do something with subdivision
+		} else if(furnType == "sphere") {
+			g = sphere;
+		} else {
+			assert(false && "bad furnType");
 		}
 
 		fin >> xIndex;

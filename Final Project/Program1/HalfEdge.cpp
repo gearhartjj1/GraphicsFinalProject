@@ -55,6 +55,7 @@ HalfEdge::HalfEdge(const Mesh &mesh) {
 		for(int j=0; j < face.numVertices; ++j) {
 			int k=(j+1)%face.numVertices;
 
+			p->sym = 0;
 			p->f = f[i];
 			p->v = v[face.indices[k]];
 			v[face.indices[k]]->p = p;
@@ -82,18 +83,22 @@ HalfEdge::HalfEdge(const Mesh &mesh) {
 			for(int k=j+1; k < (int)adj[i].size(); ++k) {
 				if(adj[i][j].first == adj[i][k].first) {
 					assert(adj[i][j].second != adj[i][k].second);
+					assert(adj[i][j].second->v != adj[i][k].second->v);
 					adj[i][j].second->sym = adj[i][k].second;
 					adj[i][k].second->sym = adj[i][j].second;
 					hit[k]=true;
 					++cnt;
 				}
 			}
+			assert(cnt!=0);
 			assert(cnt==1);
 		}
 	}
 
 	if(!checkvertexcircling())
 		assert(false && "failed vertex circling");
+	if(!checkfacepointers())
+		assert(false && "failed face pointers");
 }
 
 HalfEdge::HalfEdge(const HalfEdge &o) {
@@ -367,6 +372,16 @@ void HalfEdge::subdivide(int iterations) {
 					cur = cur->next->sym;
 				}
 			}
+
+			// Fix face pointers
+			for(int i=0; i < (int)f.size(); ++i) {
+				link *start = f[i]->p;
+				link *cur = start;
+				do {
+					cur->f = f[i];
+					cur = cur->next;
+				} while(cur != start);
+			}
 		}
 
 		// Add new vertices to mesh
@@ -442,6 +457,18 @@ bool HalfEdge::checkvertexcircling() const {
 		do {
 			if(cur->sym->v == x || cur->v != x) return false;
 			cur = cur->next->sym;
+		} while(cur != start);
+	}
+	return true;
+}
+
+bool HalfEdge::checkfacepointers() const {
+	for(int i=0; i < (int)f.size(); ++i) {
+		link *start = f[i]->p;
+		link *cur = start;
+		do {
+			if((unsigned)cur->f == 0xcdcdcdcd || cur->f == 0) return false;
+			cur=cur->next;
 		} while(cur != start);
 	}
 	return true;

@@ -23,6 +23,7 @@ using std::vector;
 //because MSVC sucks and we need _finite() instead of the standard isfinite()
 #include <float.h>
 
+
 namespace {
 	struct Comp {
 		bool operator() (const glm::vec4 &a, const glm::vec4 &b) const {
@@ -37,6 +38,13 @@ namespace {
 		assert(abs(normal.x) + abs(normal.y) + abs(normal.z) > 0);
 		assert(normal.w == 0);
 	}
+
+	void mapround(float &x) {
+		float grain = 1000;
+		x *= grain;
+		x = x<0 ? ceil(x-.5f) : floor(x+.5f);//I hate MSVC, no roundf() in cmath
+		x/=grain;
+	}
 }
 
 
@@ -45,12 +53,17 @@ void catmullclark(Mesh &mesh, int iterations) {
 	typedef map<glm::vec4, pair<int, Vertex*>, Comp> MapType;
 	MapType m;
 	vector<int> to(mesh.getVertices().size());
-	for(int i=0; i < (int)to.size(); ++i)
+	for(int i=0; i < (int)to.size(); ++i) {
 		to[i]=i;
+	}
 	int cnt=0;
 	for(int i=0; i < (int)mesh.getVertices().size(); ++i) {
 		assert(mesh.getVertices()[i]);
 		Vertex &v = *mesh.getVertices()[i];
+		mapround(v.position.x);
+		mapround(v.position.y);
+		mapround(v.position.z);
+		v.position.w = 1;
 		validateNormal(v.normal);
 		if(m.count(v.position)) {
 			assert(m[v.position].second);

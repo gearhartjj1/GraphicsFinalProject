@@ -23,6 +23,7 @@ using std::stringstream;
 #include "Table.h"
 #include "camera.h"
 #include "Mesh.h"
+#include "Sphere.h"
 
 class MyGLWidget : public QGLWidget
 {
@@ -53,6 +54,7 @@ private:
 	Cube* baseCube;
 	Chair* chair;
 	Table* table;
+	Sphere* sphere;
 
 	SceneGraph* scene;
 	SceneGraph* editNode;

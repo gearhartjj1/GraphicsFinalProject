@@ -18,6 +18,7 @@ MyGLWidget::~MyGLWidget() {
 	delete baseCube;
 	delete chair;
 	delete table;
+	delete sphere;
 	//delete testMesh;
 	//delete testMesh2;
 }
@@ -26,6 +27,7 @@ void MyGLWidget::initializeGL() {
 	baseCube = new Cube();
 	chair = new Chair(baseCube);
 	table = new Table(baseCube);
+	sphere = new Sphere;
 	scene = new SceneGraph();
 
 	//testMesh = new Mesh("extrusion1.dat");
@@ -86,6 +88,7 @@ void MyGLWidget::initializeGL() {
 	scene->setCube(baseCube);
 	scene->setChair(chair);
 	scene->setTable(table);
+	scene->setSphere(sphere);
 
 	scene->fillGraph("sample1.txt");
 
@@ -583,7 +586,9 @@ void MyGLWidget::subDivide()
 	if(editNode->getGeometry()->getIsMesh()) {
 		Mesh *mesh = dynamic_cast<Mesh*>(editNode->getGeometry());
 		if(mesh) {
-			catmullclark(*mesh, 1);
+			Mesh *newmesh = new Mesh(*mesh);
+			catmullclark(*newmesh, 1);
+			editNode->setGeometry(newmesh);//this could cause a leak, but I don't care.
 			update();
 		}
 	}
