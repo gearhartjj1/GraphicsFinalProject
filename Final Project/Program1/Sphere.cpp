@@ -12,7 +12,7 @@ Description: sphere geometry
 
 Sphere::Sphere() {
 	setHeight(1.0f);
-	setColor(glm::vec3(1,1,0));
+	setColor(glm::vec3(1,0,1));
 
 	glm::vec4 v[8] = {
 		glm::vec4(-.5f, 0.f, -.5f, 1.f),
@@ -84,11 +84,11 @@ Sphere::Sphere() {
 		mesh.getVertices()[i] = new Vertex(v[i], getColor(), n[i]);
 	mesh.getFaces().assign(f, f+6);
 
-	//catmullclark(mesh, 3);
+	catmullclark(mesh, 1);
 
 	//until catmullclark runs
-	mesh.setFilled(true);
-	mesh.triangulate();
+	//mesh.setFilled(true);
+	//mesh.triangulate();
 
 	//find effective radius and scale
 	/*float r = 0;
