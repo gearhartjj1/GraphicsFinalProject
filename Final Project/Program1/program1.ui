@@ -547,6 +547,19 @@
      <string>Sub-Divide</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_19">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>630</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ray Trace</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -607,6 +620,7 @@
     <slot>setNodeScaleZ(QString)</slot>
     <slot>setNodeRotation(QString)</slot>
     <slot>subDivide()</slot>
+    <slot>runRayTrace()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -1253,6 +1267,22 @@
     <hint type="destinationlabel">
      <x>171</x>
      <y>440</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_19</sender>
+   <signal>clicked()</signal>
+   <receiver>widget</receiver>
+   <slot>runRayTrace()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>670</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>66</x>
+     <y>369</y>
     </hint>
    </hints>
   </connection>

@@ -86,6 +86,8 @@ private:
 public slots:
 	void subDivide();
 
+	void runRayTrace();
+
 	//slots for taking new values for edit node
 	void setNodeTransX(QString x);
 	void setNodeTransY(QString y);

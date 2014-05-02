@@ -89,8 +89,6 @@ void MyGLWidget::initializeGL() {
 
 	scene->fillGraph("sample1.txt");
 
-	rayTrace("test.bmp",800,600);
-
 	lightLocation = glm::vec4((scene->getWidth()* scene->getFloorScale())/2,5,-(scene->getDepth()*(scene->getFloorScale())/2),1);
 
 	glUseProgram(shaderProgram);
@@ -167,6 +165,7 @@ void MyGLWidget::resizeGL(int width, int height) {
 
 	//Do something similar for u_modelMatrix before rendering things
 	glUniformMatrix4fv(u_projLocation, 1, GL_FALSE, &projection[0][0]);
+	//rayTrace("test.bmp",800,600);
 }
 
 //loop through generating all rays and then for each ray raytrace the scene and get the color and make a bmp from it
@@ -588,4 +587,9 @@ void MyGLWidget::subDivide()
 			update();
 		}
 	}
+}
+
+void MyGLWidget::runRayTrace()
+{
+	rayTrace("test.bmp",800,600);
 }
