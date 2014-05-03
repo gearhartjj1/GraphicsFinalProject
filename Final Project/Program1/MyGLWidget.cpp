@@ -10,7 +10,7 @@ Description: this is the cpp file for MyGLWidget it contains the definitions for
 #include "catmullclark.h"
 #include "EasyBMP.h"
 
-MyGLWidget::MyGLWidget(QWidget* parent) : QGLWidget(parent), camera(glm::vec4(0.0f,0.0f,10.0f,0.0f), glm::vec4(0.0f, 0.0f, 0.0f,0.0f), glm::vec4(0.0f, 1.0f, 0.0f,0.0f)) {
+MyGLWidget::MyGLWidget(QWidget* parent) : QGLWidget(parent), camera(glm::vec4(0.0f,0.0f,0.0f,0.0f), glm::vec4(0.0f, 0.0f, 10.0f,0.0f), glm::vec4(0.0f, 1.0f, 0.0f,0.0f)) {
 	editNode = 0;
 }
 
