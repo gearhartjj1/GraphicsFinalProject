@@ -76,6 +76,7 @@ void Mesh::docopy(const Mesh &source, bool cc) {
 	if(!cc)
 		clear();
 
+	setMesh(source.getIsMesh());
 	filled = source.filled;
 	buffered = source.buffered;
 	verticesPerFace = source.verticesPerFace;
