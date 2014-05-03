@@ -58,6 +58,7 @@ private:
 	bool filled;
 	bool buffered;
 	bool vertexnormals;
+
 	bool testConvex(glm::vec3 points[], int numPoints);
 	void makeExtrusion(ifstream* file);
 	void makeSurfRev(ifstream* file);

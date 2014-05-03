@@ -144,6 +144,7 @@ void Mesh::clear()
 	vertices.clear();
 	faces.clear();
 	filled = buffered = false;
+	vertexnormals = false;
 	verticesPerFace = 3;
 	startY = 0;
 }
