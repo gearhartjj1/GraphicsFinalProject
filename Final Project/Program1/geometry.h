@@ -45,11 +45,11 @@ public:
 	static void setNormalLoc(unsigned int nLoc) {vNormal = nLoc;}
 
 	//getters
-	float getHeight() {return height;}
-	glm::vec3 getColor() {return geoColor;}
-	glm::vec3 getSelectedColor() {return selectedColor;}
-	glm::mat4 getInverse() {return inverseTransform;}
-	bool getIsMesh() {return isMesh;}
+	float getHeight() const {return height;}
+	glm::vec3 getColor() const {return geoColor;}
+	glm::vec3 getSelectedColor() const {return selectedColor;}
+	glm::mat4 getInverse() const {return inverseTransform;}
+	bool getIsMesh() const {return isMesh;}
 	static unsigned int getVbo() {return vbo;}
 	static unsigned int getCbo() {return cbo;}
 	static unsigned int getNbo() {return nbo;}

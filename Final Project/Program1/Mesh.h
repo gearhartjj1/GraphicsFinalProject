@@ -44,10 +44,10 @@ public:
 	const vector<Face*>& getFaces() const {return faces;}
 	void draw(glm::mat4 transform, glm::vec3 color);
 	virtual double rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal);
-	int getNumVertices() {return vertices.size();}
-	int getNumFaces() {return faces.size();}
-	int getVerticesPerFace() {return verticesPerFace;}
-	bool getFilled() {return filled;}
+	int getNumVertices() const {return vertices.size();}
+	int getNumFaces() const {return faces.size();}
+	int getVerticesPerFace() const {return verticesPerFace;}
+	bool getFilled() const {return filled;}
 	void setFilled(bool filled) { this->filled = filled; }
 	void bufferData(glm::vec3 c);
 	void triangulate();//triangulate the mesh, assuming every face is convex & planar
