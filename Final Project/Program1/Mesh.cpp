@@ -79,7 +79,7 @@ void Mesh::docopy(const Mesh &source, bool cc) {
 	filled = source.filled;
 	buffered = source.buffered;
 	verticesPerFace = source.verticesPerFace;
-	setColor(glm::vec3(1.0,1.0,1.0));
+	setColor(source.getColor());
 	startY = source.startY;
 	for(int i = 0; i < source.getVertices().size(); i++)
 	{
@@ -159,6 +159,18 @@ void Mesh::makeExtrusion(ifstream* file)
 		*file >> x;
 		*file >> z;
 		basePoints[i] = glm::vec3(x,0,z);
+	}
+	bool ccw=false;
+	if(numPoints >= 3) {
+		double a=0;
+		for(int i=0; i < numPoints; ++i) {
+			a += basePoints[i].x*(double)basePoints[(i+1)%numPoints].z - basePoints[(i+1)%numPoints].x*(double)basePoints[i].z;
+		}
+		if(a > 1e-8)
+			ccw=true;
+	}
+	if(ccw) {
+		std::reverse(basePoints, basePoints + numPoints);
 	}
 
 	extrude(height,basePoints,numPoints-1);
@@ -305,8 +317,6 @@ void Mesh::extrude(double height, glm::vec3 base[], int numPoints)
 		wall[3] = top[i];
 		makePolygon(wall,4);
 	}
-	for(int i=0; i < (int)vertices.size(); ++i)
-		vertices[i]->normal *= -1;
 }
 
 void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
