@@ -49,12 +49,15 @@ public:
 	int getVerticesPerFace() const {return verticesPerFace;}
 	bool getFilled() const {return filled;}
 	void setFilled(bool filled) { this->filled = filled; }
+	bool hasVertexNormals() const { return vertexnormals; }
+	void setVertexNormals(bool nv) { vertexnormals = nv; }
 	void bufferData(glm::vec3 c);
 	void triangulate();//triangulate the mesh, assuming every face is convex & planar
 	void clear();
 private:
 	bool filled;
 	bool buffered;
+	bool vertexnormals;
 	bool testConvex(glm::vec3 points[], int numPoints);
 	void makeExtrusion(ifstream* file);
 	void makeSurfRev(ifstream* file);

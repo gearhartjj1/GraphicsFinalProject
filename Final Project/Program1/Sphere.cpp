@@ -83,6 +83,7 @@ Sphere::Sphere() {
 	for(int i=0; i < 8; ++i)
 		mesh.getVertices()[i] = new Vertex(v[i], getColor(), n[i]);
 	mesh.getFaces().assign(f, f+6);
+	mesh.setVertexNormals(true);
 
 	catmullclark(mesh, 3);
 

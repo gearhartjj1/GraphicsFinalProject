@@ -58,6 +58,7 @@ Mesh::Mesh() {
 	setColor(glm::vec3(0.0,1.0,1.0));
 	buffered = false;
 	filled = false;
+	vertexnormals=false;
 	verticesPerFace = 3;
 }
 
@@ -77,6 +78,7 @@ void Mesh::docopy(const Mesh &source, bool cc) {
 		clear();
 
 	setMesh(source.getIsMesh());
+	vertexnormals = source.vertexnormals;
 	filled = source.filled;
 	buffered = source.buffered;
 	verticesPerFace = source.verticesPerFace;
@@ -102,6 +104,7 @@ Mesh::Mesh(string fileName)
 	setColor(glm::vec3(0.0,1.0,1.0));
 	buffered = false;
 	filled = false;
+	vertexnormals=false;
 	verticesPerFace = 3;
 	ifstream fin;
 	fin.open(fileName);
@@ -359,7 +362,7 @@ void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
 			int numPts = 4;
 			//do detections to make sure it is a square side or a triangle side
 			//check if the middle points are the same
-			if((side[1].x>side[2].x-0.00001 || side[1].x<side[2].x+0.00001) && (side[1].y>side[2].y-0.00001 || side[1].y<side[2].y+0.00001) && (side[1].z>side[2].z-0.0001 || side[1].z<side[2].z+0.0001))
+			if(abs(side[1].x-side[2].x) < 1e-4 && abs(side[1].y-side[2].y) < 1e-4 && abs(side[1].z-side[2].z) < 1e-4)
 			{
 				side[2].x = side[3].x;
 				side[2].y = side[3].y;
@@ -367,7 +370,7 @@ void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
 				numPts = 3;
 			}
 			//check if the first and last points are the same
-			if(side[0].x==side[3].x && side[0].y==side[3].y && side[0].z==side[3].z)
+			if(abs(side[0].x-side[3].x) < 1e-4 && abs(side[0].y-side[3].y) < 1e-4 && abs(side[0].z-side[3].z) < 1e-4)
 			{
 				numPts = 3;
 			}

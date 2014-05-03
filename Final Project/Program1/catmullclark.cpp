@@ -50,54 +50,57 @@ namespace {
 
 void catmullclark(Mesh &mesh, int iterations) {
 	//Average the vertex normals
-	typedef map<glm::vec4, pair<int, Vertex*>, Comp> MapType;
-	MapType m;
-	vector<int> to(mesh.getVertices().size());
-	for(int i=0; i < (int)to.size(); ++i) {
-		to[i]=i;
-	}
-	int cnt=0;
-	for(int i=0; i < (int)mesh.getVertices().size(); ++i) {
-		assert(mesh.getVertices()[i]);
-		Vertex &v = *mesh.getVertices()[i];
-		mapround(v.position.x);
-		mapround(v.position.y);
-		mapround(v.position.z);
-		v.position.w = 1;
-		validateNormal(v.normal);
-		if(m.count(v.position)) {
-			assert(m[v.position].second);
-			m[v.position].second->normal += glm::normalize(v.normal);
-			m[v.position].second->color += v.color;
-		} else {
-			m[v.position].second = new Vertex(v.position, v.color, glm::normalize(v.normal));
-			m[v.position].first = cnt++;
+	if(!mesh.hasVertexNormals()) {
+		typedef map<glm::vec4, pair<int, Vertex*>, Comp> MapType;
+		MapType m;
+		vector<int> to(mesh.getVertices().size());
+		for(int i=0; i < (int)to.size(); ++i) {
+			to[i]=i;
 		}
-		to[i] = m[v.position].first;
-	}
-	vector<int> counts(to.size());
-	for(int i=0; i < (int)counts.size(); ++i)
-		++counts[to[i]];
-	for(int i=0; i < (int)mesh.getVertices().size(); ++i)
-		delete mesh.getVertices()[i];
-	mesh.getVertices().clear();
-	mesh.getVertices().resize(cnt, 0);
-	for(MapType::iterator it=m.begin(); it != m.end(); ++it) {
-		assert(0 <= it->second.first);
-		assert(it->second.first < cnt);
-		mesh.getVertices()[it->second.first] = it->second.second;
-	}
-	for(int i=0; i < cnt; ++i) {
-		assert(mesh.getVertices()[i]);
-		assert(counts[i]);
-		mesh.getVertices()[i]->color /= counts[i];
-		assert(glm::length(mesh.getVertices()[i]->normal) > 1e-12);
-		mesh.getVertices()[i]->normal = glm::normalize(mesh.getVertices()[i]->normal);
-	}
-	for(int i=0; i < (int)mesh.getFaces().size(); ++i) {
-		unsigned int *idx = mesh.getFaces()[i]->indices;
-		for(int j=0; j < mesh.getFaces()[i]->numVertices; ++j)
-			idx[j] = to[idx[j]];
+		int cnt=0;
+		for(int i=0; i < (int)mesh.getVertices().size(); ++i) {
+			assert(mesh.getVertices()[i]);
+			Vertex &v = *mesh.getVertices()[i];
+			mapround(v.position.x);
+			mapround(v.position.y);
+			mapround(v.position.z);
+			v.position.w = 1;
+			validateNormal(v.normal);
+			if(m.count(v.position)) {
+				assert(m[v.position].second);
+				m[v.position].second->normal += glm::normalize(v.normal);
+				m[v.position].second->color += v.color;
+			} else {
+				m[v.position].second = new Vertex(v.position, v.color, glm::normalize(v.normal));
+				m[v.position].first = cnt++;
+			}
+			to[i] = m[v.position].first;
+		}
+		vector<int> counts(to.size());
+		for(int i=0; i < (int)counts.size(); ++i)
+			++counts[to[i]];
+		for(int i=0; i < (int)mesh.getVertices().size(); ++i)
+			delete mesh.getVertices()[i];
+		mesh.getVertices().clear();
+		mesh.getVertices().resize(cnt, 0);
+		for(MapType::iterator it=m.begin(); it != m.end(); ++it) {
+			assert(0 <= it->second.first);
+			assert(it->second.first < cnt);
+			mesh.getVertices()[it->second.first] = it->second.second;
+		}
+		for(int i=0; i < cnt; ++i) {
+			assert(mesh.getVertices()[i]);
+			assert(counts[i]);
+			mesh.getVertices()[i]->color /= counts[i];
+			assert(glm::length(mesh.getVertices()[i]->normal) > 1e-12);
+			mesh.getVertices()[i]->normal = glm::normalize(mesh.getVertices()[i]->normal);
+		}
+		for(int i=0; i < (int)mesh.getFaces().size(); ++i) {
+			unsigned int *idx = mesh.getFaces()[i]->indices;
+			for(int j=0; j < mesh.getFaces()[i]->numVertices; ++j)
+				idx[j] = to[idx[j]];
+		}
+		mesh.setVertexNormals(true);
 	}
 
 	HalfEdge he(mesh);
