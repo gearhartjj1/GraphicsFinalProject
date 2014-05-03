@@ -278,7 +278,7 @@ void Mesh::extrude(double height, glm::vec3 base[], int numPoints)
 
 	for(int i = 0; i < numPoints; i++)
 	{
-		top[i] = base[i];
+		top[i] = base[numPoints-i-1];
 		top[i].y = top[i].y + height;
 	}
 	if(convex)
@@ -291,21 +291,22 @@ void Mesh::extrude(double height, glm::vec3 base[], int numPoints)
 	for(int i = 0; i < numPoints; i++)
 	{
 		glm::vec3* wall = new glm::vec3[4];
-		wall[0] = base[i];
+		wall[0] = base[numPoints-i-1];
 		if((i+1)<numPoints)
 		{
-			wall[1] = base[i+1];
+			wall[1] = base[numPoints-(i+1)-1];
 			wall[2] = top[i+1];
 		}
 		else
 		{
-			wall[1] = base[0];
+			wall[1] = base[numPoints-1];
 			wall[2] = top[0];
 		}
 		wall[3] = top[i];
 		makePolygon(wall,4);
 	}
-	int stuff = 0;
+	for(int i=0; i < (int)vertices.size(); ++i)
+		vertices[i]->normal *= -1;
 }
 
 void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)
