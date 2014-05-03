@@ -393,10 +393,10 @@ void HalfEdge::subdivide(int iterations) {
 			edgev[i]->id = v.size();
 			v.push_back(edgev[i]);
 		}
-	}
 
-	if(!checkquads())
-		assert(false && "failed check quads");
+		if(!checkquads())
+			assert(false && "failed check quads");
+	}
 
 	updatenormals();
 }
