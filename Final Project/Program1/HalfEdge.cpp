@@ -395,6 +395,9 @@ void HalfEdge::subdivide(int iterations) {
 		}
 	}
 
+	if(!checkquads())
+		assert(false && "failed check quads");
+
 	updatenormals();
 }
 
@@ -470,6 +473,20 @@ bool HalfEdge::checkfacepointers() const {
 			if((unsigned)cur->f == 0xcdcdcdcd || cur->f == 0) return false;
 			cur=cur->next;
 		} while(cur != start);
+	}
+	return true;
+}
+
+bool HalfEdge::checkquads() const {
+	for(int i=0; i < (int)f.size(); ++i) {
+		link *start = f[i]->p;
+		link *cur = start;
+		int cnt=0;
+		do {
+			++cnt;
+			cur = cur->next;
+		} while(cur != start);
+		if(cnt != 4) return false;
 	}
 	return true;
 }

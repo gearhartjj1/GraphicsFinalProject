@@ -47,6 +47,7 @@ public:
 	bool checkwindingorder() const;
 	bool checkvertexcircling() const;
 	bool checkfacepointers() const;
+	bool checkquads() const;
 
 private:
 	void docopy(const HalfEdge&, bool);
