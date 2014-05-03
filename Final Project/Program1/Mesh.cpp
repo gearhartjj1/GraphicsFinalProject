@@ -55,7 +55,7 @@ Face& Face::operator= (const Face &source)
 
 Mesh::Mesh() {
 	setMesh(true);
-	setColor(glm::vec3(1.0,1.0,1.0));
+	setColor(glm::vec3(0.0,1.0,1.0));
 	buffered = false;
 	filled = false;
 	verticesPerFace = 3;
@@ -98,7 +98,7 @@ Mesh::Mesh(string fileName)
 {
 	setMesh(true);
 	startY = 0;
-	setColor(glm::vec3(1.0,1.0,1.0));
+	setColor(glm::vec3(0.0,1.0,1.0));
 	buffered = false;
 	filled = false;
 	verticesPerFace = 3;
@@ -305,7 +305,7 @@ void Mesh::extrude(double height, glm::vec3 base[], int numPoints)
 		wall[3] = top[i];
 		makePolygon(wall,4);
 	}
-
+	int stuff = 0;
 }
 
 void Mesh::surfRev(int numSlices, glm::vec3 linePoints[], int numPoints)

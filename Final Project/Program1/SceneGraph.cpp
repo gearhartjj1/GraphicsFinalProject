@@ -353,7 +353,7 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 		glm::vec4 tempN;
 		double time = -1;
 		if(children[i])
-			time = rayTraceStack(children[i],Position,direction,tempC,tempN);
+			time = children[i]->geo->rayTrace(Position,direction,tempC,tempN);//rayTraceStack(children[i],Position,direction,tempC,tempN);
 		if(time>0 && time < t)
 		{
 			t = time;
@@ -381,7 +381,8 @@ double SceneGraph::rayTraceStack(SceneGraph* node, glm::vec3 Position, glm::vec3
 	if(node->children[0])
 	{
 		//see if the time is less than the childrens time
-		if(time>0 && time<(rayTraceStack(node->children[0],Position,direction,color,normal)))
+		double nextTime = rayTraceStack(node->children[0],Position,direction,color,normal);
+		if(time>0 && (time<=nextTime || nextTime < 0))
 		{
 			t = time;
 			color = tempC;

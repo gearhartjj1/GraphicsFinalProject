@@ -184,9 +184,11 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 	glm::vec3 M = glm::vec3(camera.getPos()) + glm::vec3(C);
 	glm::vec3 V = tan(perspectiveAngle/2)*glm::vec3(camera.getUpV());
 	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f),90.0f,glm::vec3(0,0,1));
-	glm::vec4 rotV = rotation * glm::vec4(V.x,V.y,V.z,1);
+	glm::vec4 rotV = rotation * glm::vec4(V,1);
 	glm::vec3 H = glm::vec3(rotV.x,rotV.y,rotV.z);
 	H*=aspectRatio;
+
+	//glm::vec3 E(0.f), M(0.f,0.f,1.f), H(1.f*float(width)/float(height),0.f,0.f), V(0.f,1.f,0.f);
 
 	for(int x = 0; x < width; x++)
 	{
