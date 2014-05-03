@@ -248,7 +248,7 @@ void HalfEdge::subdivide(int iterations) {
 			link *cur = start;
 			do {
 				vec4 pos = facev[cur->f->id]->v.position + facev[cur->sym->f->id]->v.position;
-				pos += cur->v->v.position + cur->next->v->v.position;
+				pos += cur->v->v.position + cur->sym->v->v.position;
 				pos /= 4.f;
 				pos.w = 1;
 
@@ -315,9 +315,9 @@ void HalfEdge::subdivide(int iterations) {
 
 			if(cnt >= 3) {
 				x->v.position *= float(cnt-2)/float(cnt);
-				x->v.position.w = 1;
 				sum.w = 0;
 				x->v.position += sum / float(cnt*cnt);
+				x->v.position.w = 1;
 			}
 		}
 
