@@ -59,7 +59,7 @@ double Table::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color
 		double time = cube->rayTrace(Position,direction,tempC,tempN);
 		if(time > 0 && time < t)
 		{
-			color = tempC;
+			color = getColor();
 			normal = tempN;
 			t = time;
 		}

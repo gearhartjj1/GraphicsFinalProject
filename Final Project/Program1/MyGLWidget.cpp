@@ -68,6 +68,7 @@ void MyGLWidget::initializeGL() {
 	vColor = glGetAttribLocation(shaderProgram, "vs_color");
 	vNormal = glGetAttribLocation(shaderProgram, "vs_normal");
 
+
 	//Do something similar to this to get the location of "u_modelMatrix"
 	u_projLocation = glGetUniformLocation(shaderProgram, "u_projMatrix");
 	u_modelMatrix = glGetUniformLocation(shaderProgram, "u_modelMatrix");

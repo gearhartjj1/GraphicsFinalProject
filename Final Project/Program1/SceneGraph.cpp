@@ -420,6 +420,10 @@ double SceneGraph::rayTraceStack(SceneGraph* node, glm::vec3 Position, glm::vec3
 			color = tempC;
 			normal = tempN;
 		}
+		else if(nextTime > 0 && time>nextTime)
+		{
+			t = nextTime;
+		}
 	}
 	else
 	{
