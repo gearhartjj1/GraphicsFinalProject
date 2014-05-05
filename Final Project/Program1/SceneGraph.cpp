@@ -389,7 +389,7 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 		if(time>0 && time < t)
 		{
 			t = time;
-			c = tempC;
+			c = glm::vec3(1,1,0);
 			n = tempN;
 		}
 	}
