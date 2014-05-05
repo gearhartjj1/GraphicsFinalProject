@@ -105,6 +105,8 @@ void MyGLWidget::paintGL() {
 	//matrix used to position the camera to point at the center of the scene
 	glm::mat4 centerCamera = glm::translate(glm::mat4(1.0f),glm::vec3(-(scene->getWidth()*(scene->getFloorScale()))/2,0,(scene->getDepth()*(scene->getFloorScale())/2)));
 	modelMatrix = modelMatrix * centerCamera;
+	//modelMatrix = modelMatrix * glm::scale(glm::mat4(1.0f),glm::vec3(4,4,4));
+	//camera.setRef(glm::vec4((scene->getWidth()*(scene->getFloorScale()))/2,0,-(scene->getDepth()*(scene->getFloorScale())/2),0));
 
 	modelMatrix = camera.getMatrix() * modelMatrix;
 
@@ -164,7 +166,7 @@ void MyGLWidget::resizeGL(int width, int height) {
 	//camera = glm::lookAt(glm::vec3(0.0f, 0.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	//Can multiply matrices together, careful about ordering!
 	
-	projection = projection * camera.getMatrix();
+	//projection = projection * camera.getMatrix();
 
 	//Do something similar for u_modelMatrix before rendering things
 	glUniformMatrix4fv(u_projLocation, 1, GL_FALSE, &projection[0][0]);
@@ -183,10 +185,12 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 	glm::vec4 C = glm::normalize(camera.getRef()-camera.getPos());
 	glm::vec3 M = glm::vec3(camera.getPos()) + glm::vec3(C);
 	glm::vec3 V = tan(perspectiveAngle/2)*glm::vec3(camera.getUpV());
-	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f),90.0f,glm::vec3(0,0,1));
+	//V = glm::normalize(V);
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f),90.0f,glm::vec3(C));
 	glm::vec4 rotV = rotation * glm::vec4(V,1);
 	glm::vec3 H = glm::vec3(rotV.x,rotV.y,rotV.z);
 	H*=aspectRatio;
+	//H = glm::normalize(H);
 
 	//glm::vec3 E(0.f), M(0.f,0.f,1.f), H(1.f*float(width)/float(height),0.f,0.f), V(0.f,1.f,0.f);
 
@@ -198,7 +202,10 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 			glm::vec3 P = M + (2*x/float(width-1)-1)*H + (2*y/float(height-1)-1)*V;
 			glm::vec3 D = glm::normalize(P-glm::vec3(camera.getPos()));
 			glm::vec3 color = glm::vec3(0,0,0);
-			scene->rayTrace(P,D,color);
+			if(scene->rayTrace(P,D,color))
+			{
+				int stuff = 0;
+			}
 			//put the resulting color in the bmp
 			int r = glm::clamp(int(abs(color.r)*256), 0, 255);
 			int g = glm::clamp(int(abs(color.g)*256), 0, 255);

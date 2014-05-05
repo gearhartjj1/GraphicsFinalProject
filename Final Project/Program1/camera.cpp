@@ -23,29 +23,14 @@ void Camera::makeMatrix()
 	glm::vec3 perp = glm::vec3(rotx * glm::vec4(1.f,0.f,0.f,0.f));
 
 	position = glm::rotate(glm::mat4(1.f), verticleAngle, perp) * 
-			glm::rotate(glm::mat4(1.f), horizontalAngle, glm::vec3(0.f, 1.f, 0.f)) * 
-			glm::scale(glm::mat4(1.f), glm::vec3(1.f,1.f,zoomValue)) * glm::vec4(0.f,0.f,1.f,1.f);
-	referencePoint = glm::vec4(0.f,0.f,0.f,1.f);
+			glm::rotate(glm::mat4(1.f), horizontalAngle, glm::vec3(0.f, 1.f, 0.f)) * glm::vec4(0.f,0.f,zoomValue,1.f);
+	//referencePoint = glm::vec4(0.f,0.f,0.f,1.f);
 	upVector = glm::normalize(glm::vec4(glm::cross(glm::vec3(position), perp), 0.f));
 
 	glm::mat4 camera;
 
-	glm::vec3 f(glm::normalize(referencePoint - position));
-	glm::vec3 s(glm::normalize(glm::cross(f, glm::vec3(upVector))));
-	glm::vec3 u(glm::cross(s, f));
+	camera = glm::lookAt(glm::vec3(position),glm::vec3(referencePoint),glm::vec3(upVector));
 
-	camera[0][0] = s.x;
-	camera[1][0] = s.y;
-	camera[2][0] = s.z;
-	camera[0][1] = u.x;
-	camera[1][1] = u.y;
-	camera[2][1] = u.z;
-	camera[0][2] =-f.x;
-	camera[1][2] =-f.y;
-	camera[2][2] =-f.z;
-	camera[3][0] =-glm::dot(s, glm::vec3(position));
-	camera[3][1] =-glm::dot(u, glm::vec3(position));
-	camera[3][2] = glm::dot(f, glm::vec3(position));
 	camMatrix = camera;
 }
 
@@ -61,8 +46,7 @@ glm::mat4 Camera::getMatrix()
 
 void Camera::zoom(float amount)
 {
-	zoomValue -= amount;
-	if(zoomValue == 0)
+	if(zoomValue-amount > 0)
 	{
 		zoomValue -= amount;
 	}

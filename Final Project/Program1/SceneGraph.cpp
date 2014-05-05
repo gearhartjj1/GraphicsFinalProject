@@ -112,24 +112,29 @@ void SceneGraph::draw(glm::mat4 m)
 	glm::mat4 sc = glm::scale(glm::mat4(1.0f),glm::vec3(width*floorScale,0.1,depth*floorScale));
 	//have to subtract one from the translation because the scene is zero indexed
 	glm::mat4 flrTr = glm::translate(glm::mat4(1.0f),glm::vec3((width)/2+2,-0.1,-(depth)/2-1));
+	wallInverseTransforms.push_back(glm::inverse(m * flrTr *sc));
 	cube->draw(m * flrTr *sc, glm::vec3(1,1,0));
 
 	//walls
 	sc = glm::scale(glm::mat4(1.0f),glm::vec3(width*floorScale,width/2,0.2));
 	glm::mat4 tr = glm::translate(glm::mat4(1.0f),glm::vec3(0,0,(width*floorScale)/2));
 	glm::mat4 transform = m * flrTr * tr * sc;
+	wallInverseTransforms.push_back(glm::inverse(transform));
 	cube->draw(transform,glm::vec3(1,1,0));
 
 	tr = glm::translate(glm::mat4(1.0f),glm::vec3(0,0,-(depth*floorScale)/2));
 	transform = m * flrTr * tr * sc;
+	wallInverseTransforms.push_back(transform);
 	cube->draw(transform,glm::vec3(1,1,0));
 
 	sc = glm::scale(glm::mat4(1.0f),glm::vec3(0.2,width/2,depth*floorScale));
 	tr = glm::translate(glm::mat4(1.0f),glm::vec3(-((width*floorScale)/2),0,0));
+	wallInverseTransforms.push_back(glm::inverse(m * flrTr * tr * sc));
 	cube->draw(m * flrTr * tr * sc,glm::vec3(1,1,0));
 
 	tr = glm::translate(glm::mat4(1.0f),glm::vec3((width*floorScale)/2,0,0));
 	transform = m * flrTr * tr * sc;
+	wallInverseTransforms.push_back(glm::inverse(transform));
 	cube->draw(transform,glm::vec3(1,1,0));
 }
 
@@ -237,6 +242,17 @@ void SceneGraph::fillGraph(string inputName)
 			int numDivides = 0;
 			fin >> numDivides;
 			//do something with subdivision
+			for(int j = 0; j < numDivides; j++)
+			{
+				if(g->getIsMesh()) {
+					Mesh *mesh = dynamic_cast<Mesh*>(g);
+					if(mesh) {
+						Mesh *newmesh = new Mesh(*mesh);
+						catmullclark(*newmesh, 1);
+						g = newmesh;
+					}
+				}
+			}
 		} else if(furnType == "sphere") {
 			g = sphere;
 		} else {
@@ -347,13 +363,27 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 	double t = std::numeric_limits<double>::infinity();
 	glm::vec3 c = glm::vec3(0.0f);
 	glm::vec4 n = glm::vec4(1.0f);
+
+	glm::vec3 tempC;
+	glm::vec4 tempN;
+	double time = -1;
+
 	for(int i = 0; i < width*depth; i++)
 	{
-		glm::vec3 tempC;
-		glm::vec4 tempN;
-		double time = -1;
 		if(children[i])
-			time = children[i]->geo->rayTrace(Position,direction,tempC,tempN);//rayTraceStack(children[i],Position,direction,tempC,tempN);
+			time = rayTraceStack(children[i],Position,direction,tempC,tempN);
+		if(time>0 && time < t)
+		{
+			t = time;
+			c = tempC;
+			n = tempN;
+		}
+	}
+
+	for(int i = 0; i < wallInverseTransforms.size(); i++)
+	{
+		cube->setInverse(wallInverseTransforms[i]);
+		time = cube->rayTrace(Position,direction,tempC,tempN);
 		if(time>0 && time < t)
 		{
 			t = time;
@@ -365,8 +395,10 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 	//do color calculations with the correct color and normal value then return the color
 	color = c;
 
-
-	return true;
+	if(t > 0 && t < std::numeric_limits<double>::infinity())
+		return true;
+	else
+		return false;
 }
 
 //recurses through a stack of geometry and returns the time of the closest hit time and sets the color and normal of that point

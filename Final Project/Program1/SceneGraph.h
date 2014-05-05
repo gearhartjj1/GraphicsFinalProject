@@ -15,6 +15,7 @@ Description: this is the header file for scenegraph it contains the declarations
 #include "Table.h"
 #include "Mesh.h"
 #include "Sphere.h"
+#include "catmullclark.h"
 
 #include <vector>
 using std::vector;
@@ -106,4 +107,5 @@ private:
 	SceneGraph** children;
 	vector<Mesh*> meshes;
 	vector<string> fileNames;
+	vector<glm::mat4> wallInverseTransforms;
 };
