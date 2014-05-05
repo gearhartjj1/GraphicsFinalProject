@@ -203,7 +203,7 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 		for(int y = 0; y < height; y++)
 		{
 			//calculate direction of the ray
-			glm::vec3 P = M + (2*x/float(width-1)-1)*H + (2*y/float(height-1)-1)*V;
+			glm::vec3 P = M + (2*x/float(width-1)-1)*H - (2*y/float(height-1)-1)*V;
 			glm::vec3 D = glm::normalize(P-glm::vec3(camera.getPos()));
 			glm::vec3 color = glm::vec3(0,0,0);
 			if(scene->rayTrace(P,D,color))

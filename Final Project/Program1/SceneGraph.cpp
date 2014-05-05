@@ -106,6 +106,8 @@ void SceneGraph::traverse(glm::mat4 m) const
 void SceneGraph::draw(glm::mat4 m)
 {
 	traverse(m);
+
+	wallInverseTransforms.clear();
 	
 	//add floor
 	//floor transforms
