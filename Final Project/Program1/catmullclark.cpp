@@ -107,4 +107,5 @@ void catmullclark(Mesh &mesh, int iterations) {
 	he.subdivide(iterations);
 	mesh = he.tofacelist();
 	mesh.triangulate();
+	mesh.normalizeHeight();
 }

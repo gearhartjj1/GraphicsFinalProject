@@ -7,6 +7,8 @@ Description: this is mesh.cpp it contains the definitions of the functions for t
 
 #include "Mesh.h"
 
+#include <numeric>
+
 //then modify structure to maybe set mesh up to derive from Geometry or something to make things simple later
 
 Face::Face()
@@ -542,4 +544,18 @@ void Mesh::triangulate() {
 		}
 	}
 	verticesPerFace=3;
+}
+
+
+void Mesh::normalizeHeight() {
+	startY=0;
+	float lo=std::numeric_limits<float>::max(), hi=std::numeric_limits<float>::min();
+	for(int i=0; i < (int)vertices.size(); ++i) {
+		lo = glm::min(lo, vertices[i]->position.y);
+		hi = glm::max(hi, vertices[i]->position.y);
+	}
+	for(int i=0; i < (int)vertices.size(); ++i) {
+		vertices[i]->position = glm::translate(glm::mat4(1.f), glm::vec3(0.f, -lo, 0.f)) * vertices[i]->position;
+	}
+	setHeight(hi-lo);
 }

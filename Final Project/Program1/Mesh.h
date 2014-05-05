@@ -54,6 +54,7 @@ public:
 	void bufferData(glm::vec3 c);
 	void triangulate();//triangulate the mesh, assuming every face is convex & planar
 	void clear();
+	void normalizeHeight();
 private:
 	bool filled;
 	bool buffered;
