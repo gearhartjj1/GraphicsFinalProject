@@ -183,13 +183,16 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 	output.SetBitDepth(24);
 	
 	//verify that these are correct
-	glm::vec4 C = glm::normalize(camera.getRef()-camera.getPos());
-	glm::vec3 M = glm::vec3(camera.getPos()) + glm::vec3(C);
-	glm::vec3 V = tan(perspectiveAngle/2)*glm::vec3(camera.getUpV());
+	glm::vec3 C = glm::normalize(glm::vec3(camera.getRef()-camera.getPos()));
+	glm::vec3 M = glm::vec3(camera.getPos()) + C*0.1f;
+	glm::vec3 up(camera.getUpV());
+	up = glm::cross(up, C);
+	up = glm::normalize(glm::cross(C, up));
+	glm::vec3 V = .1f*tan(perspectiveAngle/2)*up;
 	//V = glm::normalize(V);
-	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f),90.0f,glm::vec3(C));
-	glm::vec4 rotV = rotation * glm::vec4(V,1);
-	glm::vec3 H = glm::vec3(rotV.x,rotV.y,rotV.z);
+	//glm::mat4 rotation = glm::rotate(glm::mat4(1.0f),90.0f,glm::vec3(C));
+	//glm::vec4 rotV = rotation * glm::vec4(V,1);
+	glm::vec3 H = glm::length(V) * glm::normalize(glm::cross(C, up));
 	H*=aspectRatio;
 	//H = glm::normalize(H);
 
@@ -592,8 +595,8 @@ void MyGLWidget::setNodeRotation(QString r)
 
 void MyGLWidget::subDivide()
 {
-	//can check whether is mesh
-	if(editNode->getGeometry()->getIsMesh()) {
+	//can check whether is meshb
+	if(editNode && editNode->getGeometry() && editNode->getGeometry()->getIsMesh()) {
 		Mesh *mesh = dynamic_cast<Mesh*>(editNode->getGeometry());
 		if(mesh) {
 			Mesh *newmesh = new Mesh(*mesh);
@@ -606,5 +609,5 @@ void MyGLWidget::subDivide()
 
 void MyGLWidget::runRayTrace()
 {
-	rayTrace("test.bmp",800,600);
+	rayTrace("test.bmp",160,120);
 }

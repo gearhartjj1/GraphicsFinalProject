@@ -405,31 +405,20 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 double SceneGraph::rayTraceStack(SceneGraph* node, glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal)
 {
 	double t = std::numeric_limits<double>::infinity();
-	glm::vec3 tempC = glm::vec3(0.0f);
-	glm::vec4 tempN = glm::vec4(1.0f);
 	//rayTraces the particular node
-	double time = node->geo->rayTrace(Position,direction,tempC,tempN);
+	t = node->geo->rayTrace(Position,direction,color,normal);
 	//check if there are more children
 	if(node->children[0])
 	{
 		//see if the time is less than the childrens time
-		double nextTime = rayTraceStack(node->children[0],Position,direction,color,normal);
-		if(time>0 && (time<=nextTime || nextTime < 0))
-		{
-			t = time;
+		glm::vec3 tempC = glm::vec3(0.0f);
+		glm::vec4 tempN = glm::vec4(1.0f);
+		double nextTime = rayTraceStack(node->children[0],Position,direction,tempC,tempN);
+		if(nextTime > 0 && nextTime < t) {
+			t = nextTime;
 			color = tempC;
 			normal = tempN;
 		}
-		else if(nextTime > 0 && time>nextTime)
-		{
-			t = nextTime;
-		}
-	}
-	else
-	{
-		color = tempC;
-		normal = tempN;
-		t = time;
 	}
 	return t;
 }
