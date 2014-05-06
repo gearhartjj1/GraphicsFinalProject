@@ -183,7 +183,7 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 	output.SetBitDepth(24);
 	
 	//verify that these are correct
-	glm::vec3 C = glm::normalize(glm::vec3(camera.getRef()-camera.getPos()));
+	/*glm::vec3 C = glm::normalize(glm::vec3(camera.getRef()-camera.getPos()));
 	glm::vec3 M = glm::vec3(camera.getPos()) + C*0.1f;
 	glm::vec3 up(camera.getUpV());
 	up = glm::cross(up, C);
@@ -194,7 +194,13 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 	//glm::vec4 rotV = rotation * glm::vec4(V,1);
 	glm::vec3 H = glm::length(V) * glm::normalize(glm::cross(C, up));
 	H*=aspectRatio;
-	//H = glm::normalize(H);
+	glm::vec3 E(camera.getPos());
+	//H = glm::normalize(H);*/
+
+	glm::vec3 V = .1f*tan(perspectiveAngle*.5f)*glm::vec3(0.f, 1.f, 0.f);
+	glm::vec3 H = float(width)/float(height) * glm::length(V) * glm::vec3(1.f, 0.f, 0.f);
+	glm::vec3 M = .1f*glm::vec3(0.f, 0.f, -1.f);
+	glm::vec3 E(0.f);
 
 	//glm::vec3 E(0.f), M(0.f,0.f,1.f), H(1.f*float(width)/float(height),0.f,0.f), V(0.f,1.f,0.f);
 
@@ -204,7 +210,7 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 		{
 			//calculate direction of the ray
 			glm::vec3 P = M + (2*x/float(width-1)-1)*H - (2*y/float(height-1)-1)*V;
-			glm::vec3 D = glm::normalize(P-glm::vec3(camera.getPos()));
+			glm::vec3 D = glm::normalize(P-E);
 			glm::vec3 color = glm::vec3(0,0,0);
 			if(scene->rayTrace(P,D,color))
 			{
@@ -609,5 +615,5 @@ void MyGLWidget::subDivide()
 
 void MyGLWidget::runRayTrace()
 {
-	rayTrace("test.bmp",160,120);
+	rayTrace("test.bmp",800,600);
 }
