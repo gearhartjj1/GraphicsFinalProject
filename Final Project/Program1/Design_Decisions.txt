@@ -1,0 +1,17 @@
+Scene Graph and User Interaction
+	Procedural geometry was succusfully implemented into the room editor. We implemented a next and
+	previous button with corresponding inputs for updating the transformations for each object allowing
+	each one to	be edited in the program. Blinn-Phong lighting was also implemented successfully but we
+	decided to keep high ambient light for testing purposes.
+
+Catmull-Clark Subdivision
+	We decided to implement a half-edge data structure for the Catmull-Clark Subdivision functionality.
+	This way no other code had to be changed in our project to accomodate the algorithm. A face-list is
+	passed to the algorithm which transforms it into a half-edge data structure, does its computations,
+	and then returns a new updated facelist.
+
+Raytracing
+	Intersection testing, ray generation, and ray casting were all successfully implemented. We created
+	a scenegraph function which goes through all its nodes recursively calculating the appropriate colors.
+	All information necessary for the ray generation is in MyGLWidget, so ray generation is accomplished
+	inside those files.
