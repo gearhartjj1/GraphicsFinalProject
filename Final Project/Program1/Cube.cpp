@@ -65,6 +65,7 @@ void Cube::draw(glm::mat4 transform, glm::vec3 color)
 	bufferColor(color);
 
 	setInverse(glm::inverse(transform));
+	setForward(transform);
 
 	//sadly the data needs to be buffered on draw because now there shall be shapes other than cubes sad day
 	bufferData();
