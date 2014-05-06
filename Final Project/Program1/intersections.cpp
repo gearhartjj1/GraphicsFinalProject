@@ -124,6 +124,7 @@ double raySphereIntersection(const vec3& P0, const vec3& V0, const mat4& inverse
 	else {return -1;}
 
 	objspacenormal = p + float(t)*v;
+	objspacenormal.w = 0;
 
 	return t;
 }
