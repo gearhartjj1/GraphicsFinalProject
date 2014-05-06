@@ -19,4 +19,5 @@ private:
 	Cube* cube;
 	Transformation tableTransforms[5];
 	glm::mat4 inverseMatrices[5];
+	glm::mat4 forwardMatrices[5];
 };

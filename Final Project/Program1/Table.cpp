@@ -44,6 +44,7 @@ void Table::draw(glm::mat4 transform, glm::vec3 color)
 	{
 		glm::mat4 pieceTransform = tableTransforms[i].translate * tableTransforms[i].scale * tableTransforms[i].rotate;
 		inverseMatrices[i] = glm::inverse(transform * pieceTransform);
+		forwardMatrices[i] = transform * pieceTransform;
 		cube->draw(transform * pieceTransform, color);
 	}
 }
@@ -54,6 +55,7 @@ double Table::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color
 	for(int i = 0; i < 5; i++)
 	{
 		cube->setInverse(inverseMatrices[i]);
+		cube->setForward(forwardMatrices[i]);
 		glm::vec3 tempC;
 		glm::vec4 tempN;
 		double time = cube->rayTrace(Position,direction,tempC,tempN);

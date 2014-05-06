@@ -30,10 +30,12 @@ public:
 	void bufferColor(glm::vec3 color);
 	//will return the time of intersection if any and set the color and normal of the point
 	virtual double rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal) = 0;
+
 	//setters
 	void setHeight(float h) {height = h;}
-	void setColor(glm::vec3 c) {geoColor = c;}
-	void setInverse(glm::mat4 i) {inverseTransform = i;}
+	void setColor(const glm::vec3 &c) {geoColor = c;}
+	void setInverse(const glm::mat4 &i) {inverseTransform = i;}
+	void setForward(const glm::mat4 &t) { forwardTransform = t; }
 	void setMesh(bool m) {isMesh = m;}
 	static void setVbo(unsigned int v) {vbo = v;}
 	static void setCbo(unsigned int c) {cbo = c;}
@@ -46,9 +48,10 @@ public:
 
 	//getters
 	float getHeight() const {return height;}
-	glm::vec3 getColor() const {return geoColor;}
-	glm::vec3 getSelectedColor() const {return selectedColor;}
-	glm::mat4 getInverse() const {return inverseTransform;}
+	const glm::vec3& getColor() const {return geoColor;}
+	const glm::vec3& getSelectedColor() const {return selectedColor;}
+	const glm::mat4& getInverse() const {return inverseTransform;}
+	const glm::mat4& getForward() const { return forwardTransform; }
 	bool getIsMesh() const {return isMesh;}
 	static unsigned int getVbo() {return vbo;}
 	static unsigned int getCbo() {return cbo;}
@@ -64,7 +67,7 @@ private:
 	float height;
 	glm::vec3 geoColor;
 	glm::vec3 selectedColor;
-	glm::mat4 inverseTransform;
+	glm::mat4 inverseTransform, forwardTransform;
 	static unsigned int vbo;
 	static unsigned int cbo;
 	static unsigned int nbo;

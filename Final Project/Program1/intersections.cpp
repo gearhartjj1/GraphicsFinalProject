@@ -9,7 +9,7 @@ using namespace glm;
 
 const float EPS = 1e-12;//try this one, change it if it doesn't work
 
-double rayCubeIntersection(const vec3& P0, const vec3& V0, const mat4& inverse, int &near, bool &lesserplane)
+double rayCubeIntersection(const vec3& P0, const vec3& V0, const mat4& inverse, vec4 &objspacenormal)
 {
 	vec4 p = vec4(P0, 1), d = vec4(V0, 0);
 	p = inverse*p;
@@ -18,8 +18,8 @@ double rayCubeIntersection(const vec3& P0, const vec3& V0, const mat4& inverse, 
 	float tnear = -std::numeric_limits<float>::infinity(), 
 		tfar = std::numeric_limits<float>::infinity();
 
-	near=-1;
-	lesserplane = false;
+	int near=-1;
+	bool lesserplane = false;
 	for(int i=0; i < 3; ++i) {
 		if(abs(d[i]) < EPS && (p[i] < -.5-EPS || p[i] > .5+EPS)) return -1;
 		float t1, t2;
@@ -42,6 +42,11 @@ double rayCubeIntersection(const vec3& P0, const vec3& V0, const mat4& inverse, 
 		tfar = std::min(tfar, t2);
 		if(tnear > tfar + EPS) return -1;
 		if(tfar < EPS) return -1;//This epsilon makes rays cast from the surface of objects work
+	}
+
+	if(near >= 0) {
+		objspacenormal = glm::vec4(0.f, 0.f, 0.f, 0.f);
+		objspacenormal[near] = lesserplane ? -1.f : 1.f;
 	}
 
 	return tnear;

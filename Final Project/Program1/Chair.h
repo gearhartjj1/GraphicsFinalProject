@@ -19,4 +19,5 @@ private:
 	Cube* cube;
 	Transformation chairTransforms[6];
 	glm::mat4 inverseMatrices[6];
+	glm::mat4 forwardMatrices[6];
 };

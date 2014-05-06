@@ -90,9 +90,9 @@ void Cube::bufferData()
 //how would I get the normal at the point?...
 double Cube::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal)
 {
-	int near;
-	bool lesserplane;
-	double time = rayCubeIntersection(Position,direction,getInverse(),near,lesserplane);
+	glm::vec4 cubespacenormal;
+	double time = rayCubeIntersection(Position,direction,getInverse(),cubespacenormal);
+	normal = getForward() * cubespacenormal;
 	color = getColor();
 	return time;
 }
