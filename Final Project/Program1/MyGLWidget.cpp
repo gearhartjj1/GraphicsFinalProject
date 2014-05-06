@@ -214,7 +214,7 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 			glm::vec3 P = M + (2*x/float(width-1)-1)*H - (2*y/float(height-1)-1)*V;
 			glm::vec3 D = glm::normalize(P-E);
 			glm::vec3 color = glm::vec3(0,0,0);
-			if(scene->rayTrace(P,D,color,worldLightLocation,camera.getPos()))
+			if(scene->rayTrace(P,D,color,worldLightLocation,glm::vec4(E, 1.f)))
 			{
 				int stuff = 0;
 			}

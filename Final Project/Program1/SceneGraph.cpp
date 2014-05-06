@@ -420,7 +420,7 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 			diffuseTerm = .9;
 
 		glm::vec3 L = glm::normalize(lightDirection);
-		glm::vec3 V = glm::normalize(glm::vec3(eyePos));
+		glm::vec3 V = glm::vec3(eyePos) == glm::vec3(0.f) ? glm::vec3(0.f) : glm::normalize(glm::vec3(eyePos));
 		glm::vec3 H = glm::normalize((L+V));
 		int alpha = 128;
 		float base = glm::dot(H,glm::vec3(n));
