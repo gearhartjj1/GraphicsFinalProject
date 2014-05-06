@@ -390,7 +390,7 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 
 	for(int i = 0; i < wallInverseTransforms.size(); i++)
 	{
-		cube->setProperInverse(wallInverseTransforms[i]);
+		cube->setInverse(wallInverseTransforms[i]);
 		cube->setForward(wallForwardTransforms[i]);
 		time = cube->rayTrace(Position,direction,tempC,tempN);
 		if(time>0 && time < t)
