@@ -115,7 +115,7 @@ void MyGLWidget::paintGL() {
 	//drawing box for light
 	glm::mat4 lightBoxTranslate = glm::translate(glm::mat4(1.0f),glm::vec3(lightLocation.x,lightLocation.y,lightLocation.z));
 	glm::mat4 lightBoxScale = glm::scale(glm::mat4(1.0f),glm::vec3(0.25,0.25,0.25));
-	baseCube->draw(modelMatrix * lightBoxTranslate * lightBoxScale, glm::vec3(1,1,1));
+	baseCube->draw(modelMatrix * lightBoxTranslate * lightBoxScale, glm::vec3(10,10,10));
 
 	worldLightLocation = modelMatrix * lightLocation;
 	glUniform4fv(u_lightPos, 1, &worldLightLocation[0]);
