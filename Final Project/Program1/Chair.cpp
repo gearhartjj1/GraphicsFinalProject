@@ -62,7 +62,7 @@ double Chair::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color
 	double t = std::numeric_limits<double>::infinity();
 	for(int i = 0; i < 6; i++)
 	{
-		cube->setInverse(inverseMatrices[i]);
+		cube->setProperInverse(inverseMatrices[i]);
 		cube->setForward(forwardMatrices[i]);
 		glm::vec3 tempC;
 		glm::vec4 tempN;

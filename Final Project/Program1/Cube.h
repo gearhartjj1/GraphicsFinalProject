@@ -15,8 +15,10 @@ public:
 	virtual void draw(glm::mat4 transform, glm::vec3 color);
 	virtual double rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal);
 	void bufferData();
+	void setProperInverse(glm::mat4 pI) {properInverse = pI;}
 	Cube();
 private:
+	glm::mat4 properInverse;
 	glm::vec4 cube[24];
 	glm::vec4 cubeNormals[24];
 };

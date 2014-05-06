@@ -65,6 +65,7 @@ void Cube::draw(glm::mat4 transform, glm::vec3 color)
 	bufferColor(color);
 
 	setInverse(glm::inverse(transform));
+	properInverse = getInverse();
 	setForward(transform);
 
 	//sadly the data needs to be buffered on draw because now there shall be shapes other than cubes sad day
@@ -92,7 +93,7 @@ void Cube::bufferData()
 double Cube::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal)
 {
 	glm::vec4 cubespacenormal;
-	double time = rayCubeIntersection(Position,direction,getInverse(),cubespacenormal);
+	double time = rayCubeIntersection(Position,direction,properInverse,cubespacenormal);
 	normal = getForward() * cubespacenormal;
 	color = getColor();
 	return time;
