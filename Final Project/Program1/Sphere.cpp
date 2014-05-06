@@ -108,6 +108,8 @@ Sphere::Sphere() {
 
 void Sphere::draw(glm::mat4 transform, glm::vec3 color)
 {
+	setInverse(glm::inverse(transform));
+	setForward(transform);
 	mesh.draw(transform, color);
 }
 

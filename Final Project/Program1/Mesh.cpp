@@ -422,6 +422,7 @@ bool Mesh::testConvex(glm::vec3 points[], int numPoints)
 void Mesh::draw(glm::mat4 transform, glm::vec3 color)
 {
 	setInverse(glm::inverse(transform));
+	setForward(transform);
 	//makes sure the data has been buffered to the graphics card before attempting to draw the shape
 	bufferData(color);
 	if(!buffered)
