@@ -73,6 +73,7 @@ void MyGLWidget::initializeGL() {
 	u_projLocation = glGetUniformLocation(shaderProgram, "u_projMatrix");
 	u_modelMatrix = glGetUniformLocation(shaderProgram, "u_modelMatrix");
 	u_lightPos = glGetUniformLocation(shaderProgram, "u_lightPos");
+	u_lightPos = glGetUniformLocation(shaderProgram, "u_eyePos");
 
 	Geometry::setColorLoc(vColor);
 	Geometry::setVertexLoc(vLocation);
@@ -117,7 +118,8 @@ void MyGLWidget::paintGL() {
 	baseCube->draw(modelMatrix * lightBoxTranslate * lightBoxScale, glm::vec3(1,1,1));
 
 	worldLightLocation = modelMatrix * lightLocation;
-	glUniform4fv(u_lightPos,1,&worldLightLocation[0]);
+	glUniform4fv(u_lightPos, 1, &worldLightLocation[0]);
+	glUniform4fv(u_eyePos, 1, &camera.getPos()[0]);
 
 	scene->draw(modelMatrix);
 
