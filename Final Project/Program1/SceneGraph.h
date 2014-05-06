@@ -107,5 +107,5 @@ private:
 	SceneGraph** children;
 	vector<Mesh*> meshes;
 	vector<string> fileNames;
-	vector<glm::mat4> wallInverseTransforms;
+	vector<glm::mat4> wallInverseTransforms, wallForwardTransforms;
 };

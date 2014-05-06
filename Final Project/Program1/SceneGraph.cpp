@@ -108,6 +108,7 @@ void SceneGraph::draw(glm::mat4 m)
 	traverse(m);
 
 	wallInverseTransforms.clear();
+	wallForwardTransforms.clear();
 	
 	//add floor
 	//floor transforms
@@ -115,6 +116,7 @@ void SceneGraph::draw(glm::mat4 m)
 	//have to subtract one from the translation because the scene is zero indexed
 	glm::mat4 flrTr = glm::translate(glm::mat4(1.0f),glm::vec3((width)/2+2,-0.1,-(depth)/2-1));
 	wallInverseTransforms.push_back(glm::inverse(m * flrTr *sc));
+	wallForwardTransforms.push_back(m * flrTr *sc);
 	cube->draw(m * flrTr *sc, glm::vec3(1,1,0));
 
 	//walls
@@ -122,21 +124,25 @@ void SceneGraph::draw(glm::mat4 m)
 	glm::mat4 tr = glm::translate(glm::mat4(1.0f),glm::vec3(0,0,(width*floorScale)/2));
 	glm::mat4 transform = m * flrTr * tr * sc;
 	wallInverseTransforms.push_back(glm::inverse(transform));
+	wallForwardTransforms.push_back(transform);
 	cube->draw(transform,glm::vec3(1,1,0));
 
 	tr = glm::translate(glm::mat4(1.0f),glm::vec3(0,0,-(depth*floorScale)/2));
 	transform = m * flrTr * tr * sc;
-	wallInverseTransforms.push_back(transform);
+	wallInverseTransforms.push_back(glm::inverse(transform));
+	wallForwardTransforms.push_back(transform);
 	cube->draw(transform,glm::vec3(1,1,0));
 
 	sc = glm::scale(glm::mat4(1.0f),glm::vec3(0.2,width/2,depth*floorScale));
 	tr = glm::translate(glm::mat4(1.0f),glm::vec3(-((width*floorScale)/2),0,0));
 	wallInverseTransforms.push_back(glm::inverse(m * flrTr * tr * sc));
+	wallForwardTransforms.push_back(m * flrTr * tr * sc);
 	cube->draw(m * flrTr * tr * sc,glm::vec3(1,1,0));
 
 	tr = glm::translate(glm::mat4(1.0f),glm::vec3((width*floorScale)/2,0,0));
 	transform = m * flrTr * tr * sc;
 	wallInverseTransforms.push_back(glm::inverse(transform));
+	wallForwardTransforms.push_back(transform);
 	cube->draw(transform,glm::vec3(1,1,0));
 }
 
@@ -385,6 +391,7 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 	for(int i = 0; i < wallInverseTransforms.size(); i++)
 	{
 		cube->setInverse(wallInverseTransforms[i]);
+		cube->setForward(wallForwardTransforms[i]);
 		time = cube->rayTrace(Position,direction,tempC,tempN);
 		if(time>0 && time < t)
 		{
