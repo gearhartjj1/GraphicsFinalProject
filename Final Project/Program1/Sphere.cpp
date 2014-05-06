@@ -118,9 +118,9 @@ void Sphere::bufferData()
 
 double Sphere::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4& normal)
 {
-	double time = raySphereIntersection(Position,direction,getInverse());
+	glm::vec4 objspacenormal;
+	double time = raySphereIntersection(Position,direction,getInverse(),objspacenormal);
 	color = getColor();
-	//the sphere's origin is at (0,.5,0) in local space, so get normal by subtracting that
-	// from the local-space intersection point
+	normal = getForward() * objspacenormal;
 	return time;
 }

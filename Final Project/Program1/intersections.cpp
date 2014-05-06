@@ -66,7 +66,7 @@ double calculateArea(const vec3& p1, const vec3& p2, const vec3& p3)
 	return area;
 }
 
-double rayTriangleIntersection(const vec3& P0, const vec3& V0, const vec3& p1, const vec3& p2, const vec3& p3, const mat4& inverse)
+double rayTriangleIntersection(const vec3& P0, const vec3& V0, const vec3& p1, const vec3& p2, const vec3& p3, const mat4& inverse, glm::vec4 &objspacenormal)
 {
 	vec4 p = vec4(P0, 1), d = vec4(V0, 0);
 	p = inverse * p;
@@ -79,6 +79,7 @@ double rayTriangleIntersection(const vec3& P0, const vec3& V0, const vec3& p1, c
 	//calculate triangle normal
 	glm::vec3 normal = glm::cross((p1-p2),(p3-p2));
 	normal = glm::normalize(normal);
+	objspacenormal = glm::vec4(normal, 0.f);
 
 	double equationTop = glm::dot(normal,(p2-localP0));
 
@@ -103,7 +104,7 @@ double rayTriangleIntersection(const vec3& P0, const vec3& V0, const vec3& p1, c
 	return t;
 }
 
-double raySphereIntersection(const vec3& P0, const vec3& V0, const mat4& inverse)
+double raySphereIntersection(const vec3& P0, const vec3& V0, const mat4& inverse, glm::vec4 &objspacenormal)
 {
 	vec4 p = vec4(P0, 1), v = vec4(V0, 0);
 	p = inverse*p;
@@ -116,7 +117,13 @@ double raySphereIntersection(const vec3& P0, const vec3& V0, const mat4& inverse
 	if(b*b-4*a*c < 0) {return -1;}
 	t0 = (-b+sqrt(b*b-4*a*c))/2/a;
 	t1 = (-b-sqrt(b*b-4*a*c))/2/a;
-	if(0 < t0 && t0 < t1) {return t0;}
-	else if(0 < t1 && t1 < t0) {return t1;}
+
+	double t=-1;
+	if(0 < t0 && t0 < t1) {t = t0;}
+	else if(0 < t1 && t1 < t0) {t = t1;}
 	else {return -1;}
+
+	objspacenormal = p + float(t)*v;
+
+	return t;
 }

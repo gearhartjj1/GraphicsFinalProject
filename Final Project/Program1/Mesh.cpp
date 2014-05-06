@@ -447,13 +447,16 @@ double Mesh::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color,
 		glm::vec3 P0(vertices[faces[i]->indices[0]]->position);
 		glm::vec3 P1(vertices[faces[i]->indices[1]]->position);
 		glm::vec3 P2(vertices[faces[i]->indices[2]]->position);
-		double time = rayTriangleIntersection(Position,direction,P0,P1,P2,getInverse());
+		glm::vec4 objspacenormal;
+		double time = rayTriangleIntersection(Position,direction,P0,P1,P2,getInverse(), objspacenormal);
 		if(time > 0 && time < t)
 		{
 			t = time;
 			color = getColor();
+			normal = objspacenormal;
 		}
 	}
+	normal = getForward()*normal;
 	return t;
 }
 
