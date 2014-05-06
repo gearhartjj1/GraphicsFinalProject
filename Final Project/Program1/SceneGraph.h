@@ -29,6 +29,7 @@ using std::atoi;
 using std::atof;
 #include <sstream>
 using std::stringstream;
+#include <math.h>
 
 class SceneGraph
 {
@@ -38,7 +39,7 @@ public:
 	~SceneGraph();
 	SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm::vec3 scale, float rot);
 	
-	bool rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4 lightLoc);
+	bool rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4 lightLoc, glm::vec4 eyePos);
 	void fillGraph(string inputName);
 	void traverse(glm::mat4 m) const;
 	void draw(glm::mat4 m);

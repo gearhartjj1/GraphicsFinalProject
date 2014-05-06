@@ -366,7 +366,7 @@ SceneGraph* SceneGraph::getPreviousNode(SceneGraph* current)
 
 //do intersection testing for all items and find the first hit and continue calculations from there
 //need to start by checking every object and seeing which gets hit first
-bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4 lightLoc)
+bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4 lightLoc, glm::vec4 eyePos)
 {
 	double t = std::numeric_limits<double>::infinity();
 	glm::vec3 c = glm::vec3(0.0f);
@@ -398,13 +398,35 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 			t = time;
 			c = glm::vec3(1,1,0);
 			n = tempN;
+
+			//do color calculations with the correct color and normal value then return the color
+			color = glm::vec3(c.r*0.1,c.g*0.1,c.b*0.1);
+
+			glm::vec3 diffuseColor = c;
+			glm::vec3 specColor = glm::vec3(1.0f);
+
+			glm::vec3 diff = (direction - Position) ;
+			glm::vec3 hitPoint = Position + glm::vec3(diff.x*t,diff.y*t,diff.z*t);
+			glm::vec3 lightDirection = hitPoint - glm::vec3(lightLoc);
+
+			float stuff = (float)glm::dot(glm::vec3(n),lightDirection);
+			float diffuseTerm = 0;
+			if(stuff > 0)
+				diffuseTerm = stuff;
+
+			glm::vec3 L = glm::normalize(lightDirection);
+			glm::vec3 V = glm::normalize(glm::vec3(eyePos));
+			glm::vec3 H = glm::normalize((L+V));
+			int alpha = 128;
+			stuff = glm::dot(H,glm::vec3(n));
+			float otherStuff = 0;
+			if(stuff > 0)
+				otherStuff = stuff;
+			float specContrib = pow(otherStuff,alpha);
+
+			color += (diffuseTerm * diffuseColor) + (specContrib * specColor);
 		}
 	}
-
-	//do color calculations with the correct color and normal value then return the color
-	color = c;
-	//glm::vec4 hitPoint = Position + (direction - Position) * t;
-	//glm::vec4 lightDirection = lightLoc - hitPoint;
 
 	if(t > 0 && t < std::numeric_limits<double>::infinity())
 		return true;
