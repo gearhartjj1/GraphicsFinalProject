@@ -13,7 +13,8 @@ void main() {
 	vec4 specColor = vec4(1, 1, 1, 1);
 
 	//TODO: complete this using the diffuse equation from class!
-	float diffuseTerm = max(0, dot(fs_normal, fs_light));
+	float diffuseTerm = dot(fs_normal, fs_light) / (length(fs_normal) * length(fs_light));
+	diffuseTerm = clamp(diffuseTerm, 0, 0.9);
 	
 	// Calculate the half-way vector H = (L+V)/length(L+V)
 	vec3 L = fs_light;

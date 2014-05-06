@@ -73,7 +73,7 @@ void MyGLWidget::initializeGL() {
 	u_projLocation = glGetUniformLocation(shaderProgram, "u_projMatrix");
 	u_modelMatrix = glGetUniformLocation(shaderProgram, "u_modelMatrix");
 	u_lightPos = glGetUniformLocation(shaderProgram, "u_lightPos");
-	u_lightPos = glGetUniformLocation(shaderProgram, "u_eyePos");
+	u_eyePos = glGetUniformLocation(shaderProgram, "u_eyePos");
 
 	Geometry::setColorLoc(vColor);
 	Geometry::setVertexLoc(vLocation);

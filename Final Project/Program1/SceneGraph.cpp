@@ -409,24 +409,24 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 		glm::vec3 diffuseColor = c;
 		glm::vec3 specColor = glm::vec3(1.0f);
 
-		glm::vec3 diff = (direction - Position) ;
-		glm::vec3 hitPoint = Position + glm::vec3(diff.x*t,diff.y*t,diff.z*t);
+		//glm::vec3 diff = (direction - Position) ;
+		glm::vec3 hitPoint = Position + glm::vec3(direction.x*t,direction.y*t,direction.z*t);
 		glm::vec3 lightDirection = hitPoint - glm::vec3(lightLoc);
 
-		float stuff = (float)glm::dot(glm::vec3(n),lightDirection);
-		float diffuseTerm = 0;
-		if(stuff > 0)
-			diffuseTerm = stuff;
+		float diffuseTerm = (float)glm::dot(glm::vec3(n),lightDirection);
+		if(diffuseTerm < 0)
+			diffuseTerm=0;
+		if(diffuseTerm > .9)
+			diffuseTerm = .9;
 
 		glm::vec3 L = glm::normalize(lightDirection);
 		glm::vec3 V = glm::normalize(glm::vec3(eyePos));
 		glm::vec3 H = glm::normalize((L+V));
 		int alpha = 128;
-		stuff = glm::dot(H,glm::vec3(n));
-		float otherStuff = 0;
-		if(stuff > 0)
-			otherStuff = stuff;
-		float specContrib = pow(otherStuff,alpha);
+		float base = glm::dot(H,glm::vec3(n));
+		if(base < 0)
+			base=0;
+		float specContrib = pow(base,alpha);
 
 		color += (diffuseTerm * diffuseColor) + (specContrib * specColor);
 
