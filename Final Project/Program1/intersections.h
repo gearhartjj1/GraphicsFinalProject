@@ -2,7 +2,7 @@
 
 #include "glm\glm.hpp"
 
-double rayCubeIntersection(const glm::vec3& P0, const glm::vec3& V0, const glm::mat4& inverse);
+double rayCubeIntersection(const glm::vec3& P0, const glm::vec3& V0, const glm::mat4& inverse, int&, bool&);
 
 double rayTriangleIntersection(const glm::vec3& P0, const glm::vec3& V0, const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::mat4& inverse);
 
