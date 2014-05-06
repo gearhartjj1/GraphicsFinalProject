@@ -442,6 +442,10 @@ void MyGLWidget::setTextBoxes()
 	emit sendRotation(QString::fromStdString(s.str()));
 	s.str("");
 
+	s << editNode->getReflect();
+	emit sendReflect(QString::fromStdString(s.str()));
+	s.str("");
+
 	this->update();
 }
 
@@ -598,6 +602,25 @@ void MyGLWidget::setNodeRotation(QString r)
 	s << editNode->getRotY();
 	emit sendRotation(QString::fromStdString(s.str()));
 	s.str("");
+	this->update();
+}
+
+void MyGLWidget::setNodeShiny(QString s)
+{
+	if(!editNode)
+		return;
+
+	double shine = editNode->getReflect();
+	double oldShine = shine;
+	if(shine >= 0 && shine <= 1)
+	{
+		editNode->setReflectivity(shine);
+	}
+
+	stringstream t;
+	t<<editNode->getReflect();
+	emit sendReflect(QString::fromStdString(t.str()));
+	t.str("");
 	this->update();
 }
 

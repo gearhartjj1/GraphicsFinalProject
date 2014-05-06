@@ -100,6 +100,7 @@ public slots:
 	void setNodeScaleY(QString sY);
 	void setNodeScaleZ(QString sZ);
 	void setNodeRotation(QString r);
+	void setNodeShiny(QString s);
 
 	void selectNode();
 	void selectPrevNode();
@@ -126,4 +127,5 @@ signals:
 	void sendScaleY(QString s);
 	void sendScaleZ(QString s);
 	void sendRotation(QString r);
+	void sendReflect(QString s);
 };

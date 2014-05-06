@@ -67,6 +67,7 @@ public:
 	bool getSelected() {return selected;}
 	Geometry* getGeometry() {return geo;}
 	void setGeometry(Geometry *g) { geo = g; }
+	float getReflect() {return reflectivity;}
 
 	//setters
 	void setTransX(float tX) {transX = tX;}

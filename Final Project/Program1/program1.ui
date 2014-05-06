@@ -295,7 +295,7 @@
      <string>Object changes</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_14">
+   <widget class="QPushButton" name="nextButton">
     <property name="geometry">
      <rect>
       <x>560</x>
@@ -308,7 +308,7 @@
      <string>Next</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_15">
+   <widget class="QPushButton" name="setValuesButton">
     <property name="geometry">
      <rect>
       <x>490</x>
@@ -501,14 +501,14 @@
    <widget class="InputLine" name="rotationLine">
     <property name="geometry">
      <rect>
-      <x>540</x>
+      <x>500</x>
       <y>580</y>
       <width>31</width>
       <height>20</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_16">
+   <widget class="QPushButton" name="prevButton">
     <property name="geometry">
      <rect>
       <x>500</x>
@@ -560,6 +560,29 @@
      <string>Ray Trace</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_14">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>580</y>
+      <width>46</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Shinyness</string>
+    </property>
+   </widget>
+   <widget class="InputLine" name="shinyLine">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>580</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -596,6 +619,7 @@
     <signal>sendScaleY(QString)</signal>
     <signal>sendScaleZ(QString)</signal>
     <signal>sendRotation(QString)</signal>
+    <signal>sendReflect(QString)</signal>
     <slot>chooseScene()</slot>
     <slot>zoomIn()</slot>
     <slot>zoomOut()</slot>
@@ -621,6 +645,7 @@
     <slot>setNodeRotation(QString)</slot>
     <slot>subDivide()</slot>
     <slot>runRayTrace()</slot>
+    <slot>setNodeShiny(QString)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -647,8 +672,8 @@
   <tabstop>pushButton_11</tabstop>
   <tabstop>pushButton_12</tabstop>
   <tabstop>pushButton_13</tabstop>
-  <tabstop>pushButton_14</tabstop>
-  <tabstop>pushButton_15</tabstop>
+  <tabstop>nextButton</tabstop>
+  <tabstop>setValuesButton</tabstop>
   <tabstop>transXLine</tabstop>
   <tabstop>transYLine</tabstop>
   <tabstop>transZLine</tabstop>
@@ -656,7 +681,7 @@
   <tabstop>scaleYLine</tabstop>
   <tabstop>scaleZLine</tabstop>
   <tabstop>rotationLine</tabstop>
-  <tabstop>pushButton_16</tabstop>
+  <tabstop>prevButton</tabstop>
  </tabstops>
  <resources>
   <include location="program1.qrc"/>
@@ -871,7 +896,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_14</sender>
+   <sender>nextButton</sender>
    <signal>clicked()</signal>
    <receiver>widget</receiver>
    <slot>selectNode()</slot>
@@ -1009,13 +1034,13 @@
      <y>294</y>
     </hint>
     <hint type="destinationlabel">
-     <x>552</x>
-     <y>617</y>
+     <x>512</x>
+     <y>632</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_16</sender>
+   <sender>prevButton</sender>
    <signal>clicked()</signal>
    <receiver>widget</receiver>
    <slot>selectPrevNode()</slot>
@@ -1031,7 +1056,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>setValuesButton</sender>
    <signal>clicked()</signal>
    <receiver>transXLine</receiver>
    <slot>signalFile()</slot>
@@ -1047,7 +1072,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>setValuesButton</sender>
    <signal>clicked()</signal>
    <receiver>transYLine</receiver>
    <slot>signalFile()</slot>
@@ -1063,7 +1088,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>setValuesButton</sender>
    <signal>clicked()</signal>
    <receiver>transZLine</receiver>
    <slot>signalFile()</slot>
@@ -1079,7 +1104,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>setValuesButton</sender>
    <signal>clicked()</signal>
    <receiver>scaleXLine</receiver>
    <slot>signalFile()</slot>
@@ -1095,7 +1120,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>setValuesButton</sender>
    <signal>clicked()</signal>
    <receiver>scaleYLine</receiver>
    <slot>signalFile()</slot>
@@ -1111,7 +1136,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>setValuesButton</sender>
    <signal>clicked()</signal>
    <receiver>scaleZLine</receiver>
    <slot>signalFile()</slot>
@@ -1127,7 +1152,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_15</sender>
+   <sender>setValuesButton</sender>
    <signal>clicked()</signal>
    <receiver>rotationLine</receiver>
    <slot>signalFile()</slot>
@@ -1137,8 +1162,8 @@
      <y>656</y>
     </hint>
     <hint type="destinationlabel">
-     <x>556</x>
-     <y>629</y>
+     <x>516</x>
+     <y>632</y>
     </hint>
    </hints>
   </connection>
@@ -1245,8 +1270,8 @@
    <slot>setNodeRotation(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>550</x>
-     <y>628</y>
+     <x>510</x>
+     <y>632</y>
     </hint>
     <hint type="destinationlabel">
      <x>380</x>
@@ -1283,6 +1308,54 @@
     <hint type="destinationlabel">
      <x>66</x>
      <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widget</sender>
+   <signal>sendReflect(QString)</signal>
+   <receiver>shinyLine</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>315</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>622</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>setValuesButton</sender>
+   <signal>clicked()</signal>
+   <receiver>shinyLine</receiver>
+   <slot>signalFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>520</x>
+     <y>654</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>605</x>
+     <y>622</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>shinyLine</sender>
+   <signal>sendText(QString)</signal>
+   <receiver>widget</receiver>
+   <slot>setNodeShiny(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>605</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>315</x>
+     <y>263</y>
     </hint>
    </hints>
   </connection>
