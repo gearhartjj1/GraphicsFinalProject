@@ -429,6 +429,15 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 		float specContrib = pow(otherStuff,alpha);
 
 		color += (diffuseTerm * diffuseColor) + (specContrib * specColor);
+
+		glm::vec3 reflectDir = glm::vec3((glm::vec4(direction,0) * glm::rotate(glm::mat4(1.0f),180.0f,glm::vec3(n))));
+		reflectDir*=-1;
+		reflectDir = glm::normalize(reflectDir);
+		glm::vec3 reflectColor;
+		if(rayTrace(hitPoint,reflectDir,reflectColor,lightLoc,eyePos))
+		{
+			color *= reflectivity*reflectColor*(1-reflectivity);
+		}
 	}
 
 	if(t > 0 && t < std::numeric_limits<double>::infinity())
