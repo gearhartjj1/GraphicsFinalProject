@@ -611,6 +611,7 @@ void MyGLWidget::setNodeShiny(QString s)
 		return;
 
 	double shine = editNode->getReflect();
+	shine = atof(s.toStdString().c_str());
 	double oldShine = shine;
 	if(shine >= 0 && shine <= 1)
 	{
