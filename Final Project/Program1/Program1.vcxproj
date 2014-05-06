@@ -187,6 +187,7 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Design_Decisions.txt" />
     <None Include="extrusion1.dat" />
     <None Include="extrusion2.dat" />
     <None Include="lambert.frag" />
