@@ -116,7 +116,7 @@ void MyGLWidget::paintGL() {
 	glm::mat4 lightBoxScale = glm::scale(glm::mat4(1.0f),glm::vec3(0.25,0.25,0.25));
 	baseCube->draw(modelMatrix * lightBoxTranslate * lightBoxScale, glm::vec3(1,1,1));
 
-	glm::vec4 worldLightLocation = modelMatrix * lightLocation;
+	worldLightLocation = modelMatrix * lightLocation;
 	glUniform4fv(u_lightPos,1,&worldLightLocation[0]);
 
 	scene->draw(modelMatrix);
@@ -212,7 +212,7 @@ void MyGLWidget::rayTrace(string imageName, int width, int height)
 			glm::vec3 P = M + (2*x/float(width-1)-1)*H - (2*y/float(height-1)-1)*V;
 			glm::vec3 D = glm::normalize(P-E);
 			glm::vec3 color = glm::vec3(0,0,0);
-			if(scene->rayTrace(P,D,color))
+			if(scene->rayTrace(P,D,color,worldLightLocation))
 			{
 				int stuff = 0;
 			}

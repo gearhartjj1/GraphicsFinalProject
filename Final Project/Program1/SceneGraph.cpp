@@ -360,7 +360,7 @@ SceneGraph* SceneGraph::getPreviousNode(SceneGraph* current)
 
 //do intersection testing for all items and find the first hit and continue calculations from there
 //need to start by checking every object and seeing which gets hit first
-bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color)
+bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4 lightLoc)
 {
 	double t = std::numeric_limits<double>::infinity();
 	glm::vec3 c = glm::vec3(0.0f);
@@ -396,6 +396,8 @@ bool SceneGraph::rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& co
 
 	//do color calculations with the correct color and normal value then return the color
 	color = c;
+	//glm::vec4 hitPoint = Position + (direction - Position) * t;
+	//glm::vec4 lightDirection = lightLoc - hitPoint;
 
 	if(t > 0 && t < std::numeric_limits<double>::infinity())
 		return true;

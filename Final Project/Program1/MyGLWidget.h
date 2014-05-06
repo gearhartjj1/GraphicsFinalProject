@@ -68,6 +68,7 @@ private:
 
 	//location of the lightsource, perhaps put in different class later
 	glm::vec4 lightLocation;
+	glm::vec4 worldLightLocation;
 
 	unsigned int vertexShader;
 	unsigned int fragmentShader;

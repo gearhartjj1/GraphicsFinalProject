@@ -38,7 +38,7 @@ public:
 	~SceneGraph();
 	SceneGraph(Geometry* g, int w, int d, int numN, glm::vec3 trans, glm::vec3 scale, float rot);
 	
-	bool rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color);
+	bool rayTrace(glm::vec3 Position, glm::vec3 direction, glm::vec3& color, glm::vec4 lightLoc);
 	void fillGraph(string inputName);
 	void traverse(glm::mat4 m) const;
 	void draw(glm::mat4 m);
