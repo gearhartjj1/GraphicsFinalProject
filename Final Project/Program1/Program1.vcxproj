@@ -190,6 +190,7 @@
     <None Include="Design_Decisions.txt" />
     <None Include="extrusion1.dat" />
     <None Include="extrusion2.dat" />
+    <None Include="Group Information.txt" />
     <None Include="lambert.frag" />
     <None Include="lambert.vert" />
     <None Include="sample1.txt" />
